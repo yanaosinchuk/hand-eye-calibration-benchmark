@@ -1,0 +1,46 @@
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+env/
+*.egg-info/
+build/
+dist/
+
+# LaTeX build products
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lol
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.xdv
+paper/main.pdf
+
+# Temporary experiment outputs and raw acquisition data
+outputs/
+results/cache/
+results_run.log
+data/raw/
+
+# Editor and operating-system files
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+

@@ -7,20 +7,20 @@ An experimental comparison of OpenCV hand-eye calibration methods using syntheti
 
 ## Research question
 
-A camera and a robot describe positions in different coordinate systems. Hand-eye calibration estimates the fixed transformation connecting those descriptions.
+A camera and a robot describe positions in different coordinate systems. Hand-eye calibration estimates the fixed transformation connecting those descriptions [1].
 The central equation is
 
 $$
 A_i X = X B_i,
 $$
 
-where $A_i$ and $B_i$ are corresponding relative motions and $X$ is the unknown rigid transformation.
+where $A_i$ and $B_i$ are corresponding relative motions and $X$ is the unknown rigid transformation [1].
 
 The project will investigate how five calibration methods differ in accuracy, validation consistency and repeatability, and how those differences depend on the number and diversity of acquisition poses.
 
 ## Methods to compare
 
-The planned benchmark will use the five methods provided by OpenCV’s `calibrateHandEye` interface:
+The planned benchmark will use the five methods provided by OpenCV’s `calibrateHandEye` interface [2]:
 
 - Tsai–Lenz
 - Park–Martin
@@ -38,13 +38,14 @@ All methods will receive the same observations and preprocessing. Rotation and t
 | `.gitignore` | Exclusions for Python caches, LaTeX build products and temporary outputs |
 | `paper/main.tex` | Complete LaTeX thesis draft, including mathematical derivations and the proposed experimental protocol |
 | `paper/references.bib` | Bibliography for the thesis |
+| `docs/citation-map.md` | Source locations and provenance of the displayed formulas and worked examples |
 | `paper/Logo-Hochschule-Darmstadt.png` | University logo used by the title page |
 
 Python modules, experiment scripts and datasets will be added as they are implemented.
 
 ## Build the thesis
 
-Use a TeX installation containing pdfLaTeX, Biber, biblatex, PGFPlots, listings and the German Babel language files.
+Use a TeX installation containing pdfLaTeX, Biber, biblatex, PGFPlots, listings, German and Ukrainian Babel language files, and T2A Cyrillic fonts (for example CM-Super). The Ukrainian bibliography preserves the original titles and author names.
 
 ```bash
 cd paper
@@ -80,7 +81,13 @@ Finite solver outputs will be checked for valid rigid transformations. Numerical
 - Roger Y. Tsai and Reimar K. Lenz, *A New Technique for Fully Autonomous and Efficient 3D Robotics Hand/Eye Calibration* (1989): [IEEE](https://ieeexplore.ieee.org/document/34770), DOI `10.1109/70.34770`.
 - OpenCV, [`calibrateHandEye` documentation](https://docs.opencv.org/5.0/main_modules/calib.html#calibratehandeye).
 
-The thesis bibliography also includes the original papers for the other compared methods, the inspected OpenCV source and David Marr’s *Vision*.
+The thesis bibliography also includes the original papers for the other compared methods, the inspected OpenCV source and David Marr’s *Vision*. German robotics and numerical-algebra texts and two Ukrainian textbooks support the mathematical foundations. See the [citation map](docs/citation-map.md) for the passages used and for the distinction between source relations and calculations constructed in this thesis.
+
+The thesis uses plain numbered citations for factual statements and displayed equations. Worked examples identify their values as author-chosen and cite the underlying mathematical relations. Research plans, personal acknowledgments and notation choices are identified as statements by the author.
+
+[1] Stefan Wenhardt, *Ansichtenauswahl für die 3-D-Rekonstruktion statischer Szenen* (2013), Section 2.3: [German dissertation](https://www5.cs.fau.de/fileadmin/research/Publikationen/2013/Wenhardt13-AFD.pdf).
+
+[2] OpenCV, [`calibrateHandEye` documentation](https://docs.opencv.org/5.0/main_modules/calib.html#calibratehandeye).
 
 ## Author
 

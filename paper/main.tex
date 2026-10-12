@@ -200,7 +200,7 @@
 \newpage
 \section*{Declaration}
 \addcontentsline{toc}{section}{Declaration}
-I affirm that I have independently authored this seminar document and have not used sources or aids other than those explicitly mentioned. Any directly quoted or paraphrased passages from other works are appropriately acknowledged.
+I affirm that I have independently authored this document and have not used sources or aids other than those explicitly mentioned. Any directly quoted or paraphrased passages from other works are appropriately acknowledged.
 
 \vspace{2cm}
 Yana Osinchuk
@@ -215,7 +215,6 @@ This thesis will compare five hand--eye calibration methods for a laboratory rob
 
 The theoretical part develops coordinate frames, rigid transformations, rotation representations and least squares before deriving the calibration equation and each selected solver. The proposed experiments use shared acquisition data and preprocessing to examine pose count, pose diversity, repeatability and consistency on held-out observations. Synthetic data provide a known transformation for accuracy evaluation. Laboratory accuracy will be assessed where an independent reference is available.
 
-This is a working draft. The final summary will include the experimental findings once the measurements have been acquired and evaluated.
 
 \newpage
 \begin{otherlanguage}{ngerman}
@@ -225,7 +224,7 @@ Diese Bachelorarbeit soll f\"unf Verfahren der Hand-Auge-Kalibrierung f\"ur ein 
 
 Der theoretische Teil erl\"autert zun\"achst Koordinatensysteme, starre Transformationen, Rotationsdarstellungen und die Methode der kleinsten Quadrate. Darauf aufbauend werden die Kalibrierungsgleichung und die f\"unf ausgew\"ahlten L\"osungsverfahren hergeleitet. Die geplanten Experimente untersuchen den Einfluss der Anzahl und r\"aumlichen Verteilung der Aufnahmeposen sowie die Wiederholbarkeit und die Konsistenz auf unabh\"angigen Validierungsaufnahmen. Alle Verfahren erhalten dieselben Messdaten und dieselbe Vorverarbeitung.
 
-Synthetische Daten mit bekannter Transformation erm\"oglichen eine Bewertung der Genauigkeit. F\"ur Aussagen zur absoluten Genauigkeit im Labor ist eine unabh\"angige Referenz erforderlich. Die vorliegende Fassung ist ein Arbeitsentwurf; die gemessenen Ergebnisse werden nach Abschluss der Experimente erg\"anzt.
+Synthetische Daten mit bekannter Transformation erm\"oglichen eine Bewertung der Genauigkeit. F\"ur Aussagen zur absoluten Genauigkeit im Labor ist eine unabh\"angige Referenz erforderlich.
 \end{otherlanguage}
 
 % ------------------------------------------------------------
@@ -238,7 +237,7 @@ I would like to thank Prof. Dr. Thomas Maerz from the bottom of my heart for eve
 
 I am especially grateful for his help in finding my internship at the Hessian Agency for Nature Conservation, Environment and Geology (HLNUG), and for arranging an opportunity for me to work in the robotics laboratory. He also spoke with another professor to obtain the necessary permission for my work there. Each of these steps required his time and effort, and each made a real difference to my education and the opportunities available to me.
 
-What I appreciate most is the kindness and care behind his support. He has helped me time and again, taken my questions seriously, and made the effort to find solutions whenever difficulties arose. Knowing that I could turn to him has given me confidence to pursue new challenges and develop my own ideas. I am deeply grateful for his trust in me, for his encouragement, and for the many opportunities he has helped make possible.
+What I appreciate most is the kindness and care behind his support. He has taken my questions seriously, and made the effort to find solutions whenever difficulties arose. Knowing that I could turn to him has given me confidence to pursue new challenges and develop my own ideas. I am deeply grateful for his trust in me, for his encouragement, and for the many opportunities he has helped make possible.
 
 % ------------------------------------------------------------
 % Contents
@@ -267,10 +266,10 @@ How do the five OpenCV hand--eye calibration methods differ in validation perfor
 \end{quote}
 The comparison will use identical input observations and shared preprocessing. It will examine the influence of acquisition pose count, the distribution of orientations and positions, and repeated acquisitions. Synthetic data with a known transformation will supplement the laboratory measurements.
 
-The evaluated objects are particular software implementations. An implementation can include motion selection, numerical normalisation and other details that are not obvious from the name of its underlying method. These details will be documented alongside the original mathematical formulations.
+The evaluated objects are particular software implementations. 
 
 \subsection{Scope and Contribution}
-The planned contribution is a reproducible comparison supported by an accessible derivation of the calibration problem and its solvers. Camera intrinsic calibration and image-based target-pose estimation are necessary upstream stages. Their settings will be held fixed in the main algorithm comparison, because changes in these stages would otherwise make it difficult to attribute an observed difference to the hand--eye solver.
+The contribution is a reproducible comparison supported by an accessible derivation of the calibration problem and its solvers. Camera intrinsic calibration and image-based target-pose estimation are necessary upstream stages. Their settings will be held fixed in the main algorithm comparison, because changes in these stages would otherwise make it difficult to attribute an observed difference to the hand--eye solver.
 
 The study will distinguish three quantities. Accuracy describes agreement with an independent reference. Consistency describes how well an estimate agrees with additional observations. Repeatability describes the variation between estimates obtained from repeated measurements. A small consistency error is useful evidence, but does not by itself establish absolute accuracy.
 
@@ -282,10 +281,10 @@ Section~\ref{sec:foundations} begins with the meaning of a coordinate frame and 
 Each mathematical construction is introduced through its geometric meaning before the algebra is used. The explanations of coordinate transformations and robotic geometry follow the framework developed in Corke's \emph{Robotics, Vision and Control} \cite{corke}. The algorithm sections cite the original papers and distinguish them from the OpenCV implementation.
 
 
-% Source: 02_foundations.tex
+\newpage
 \section{Mathematical Foundations}\label{sec:foundations}
 \subsection{A Physical Point and Its Coordinates}
-The coordinate-frame and pose concepts introduced in this subsection are standard robotics background; see Corke \cite{corke} for a textbook treatment.
+The coordinate-frame and pose concepts introduced in this subsection are standard robotics background. \cite{corke}
 
 A physical point has a location in space. Coordinates describe that location relative to a chosen origin and three chosen axes. The same point can therefore have different coordinate values in different frames. Moving the coordinate frame changes the description of the point; it does not necessarily move the physical point.
 
@@ -298,7 +297,7 @@ The components are distances along the frame's axes. All components must use the
 The \emph{pose} of a rigid object describes both its position and its orientation. Position answers where the object's origin is. Orientation answers how its axes are directed. In three-dimensional space, a rigid pose has six degrees of freedom: three for translation and three for rotation. Some useful representations contain more than six numbers, because constraints connect their entries.
 
 \subsection{Reading the Vector and Matrix Expressions}
-The vector and matrix operations reviewed here are standard linear-algebra background; a supporting reference is Corke's linear-algebra appendix \cite{corke}.
+The vector and matrix operations reviewed here are standard linear-algebra background. \cite{corke}
 
 A scalar is one number. A vector collects several numbers in a fixed order. A matrix arranges numbers in rows and columns. Multiplying a \(3\times3\) matrix by a three-component column vector produces another three-component vector. Each output component is the sum of the products along one row:
 \[
@@ -510,7 +509,8 @@ The null space of \(D\) is the set of vectors satisfying \(Dz=0\). A direction i
 These statements concern a particular algebraic residual. They do not automatically mean that the estimate minimises a geometric angle error or image reprojection error. Different representations and residuals can produce different estimates from noisy observations, even when their exact equations describe the same physical relationship.
 
 
-% Source: 03_formulation.tex
+
+\newpage
 \section{From Measurements to \texorpdfstring{\(AX=XB\)}{AX=XB}}\label{sec:formulation}
 \subsection{What the Camera Measures}
 A camera image contains two-dimensional pixel coordinates. A pixel position alone does not specify a complete three-dimensional point: points at different distances can lie on the same viewing ray. A calibration target of known geometry provides additional information. Its feature locations are known in a target coordinate frame, so their image projections can be used to estimate the target pose.
@@ -694,7 +694,7 @@ AX=XB=
 The matrices look different because their coordinates belong to different frames, yet they describe compatible motions. This is a mathematical example constructed from a known transformation, not a laboratory measurement. A full calibration requires a sufficiently informative collection of motions rather than this single example.
 
 
-% Source: 04_methods_separable.tex
+\newpage
 \section{The Five Calibration Methods}\label{sec:methods}
 \subsection{A Common Problem, Different Representations}
 All five methods seek one fixed rigid transformation consistent with a collection of motion equations,
@@ -1046,8 +1046,8 @@ Exact, sufficiently informative data can make these constructions agree on the s
 For a practical comparison, the method name must therefore be accompanied by the software version, data geometry, translation unit, valid output checks and validation criterion. A solver ranking without these conditions would be difficult to interpret.
 
 
-% Source: 06_experiment.tex
-\section{Proposed Experimental Protocol}\label{sec:experiment}
+\newpage
+\section{Experimental Protocol}\label{sec:experiment}
 \subsection{Laboratory Setup and Recorded Information}
 The laboratory experiment will be specified after confirming the robot, camera and mounting arrangement. The record will include the robot model and selected tool frame; camera model, resolution and settings; target type, measured dimensions and coordinate convention; mounting rigidity; translation unit; intrinsic calibration parameters; target-pose estimator; acquisition synchronisation; and OpenCV version.
 
@@ -1145,16 +1145,16 @@ For repeated estimates, rotational variation will be measured relative to a defi
 
 The results will present accuracy where a reference exists, held-out consistency, repeatability and failure rate as separate quantities. Solver conclusions will be linked to the relevant pose count, diversity and measurement conditions. Any modified algorithm, such as translation refitting or nonlinear refinement, will be reported as an additional procedure with its own label.
 
-\section{Results and Discussion to Be Completed}
-The experimental results will be added after acquisition and analysis. Planned outputs include the documented laboratory setup, the accepted observation counts, the pose distribution, error summaries for each method, failure counts, and changes with acquisition count and diversity.
-
-The discussion will relate observed behaviour to the mathematical constructions in Section~\ref{sec:methods}. It will also examine the influence of upstream target-pose estimation, possible systematic errors, reference uncertainty and the limits of transferring the findings to another robot or camera installation.
-
-\section{Conclusion to Be Completed}
-The final conclusion will answer the research question using the measured evidence. It will state which methods performed reliably under the tested conditions, what acquisition geometry was beneficial, and which limitations remain. No ranking or numerical result is asserted in this draft.
+\newpage
+\section{Results and Discussion}
 
 
-% Source: 07_appendix.tex
+\newpage
+\section{Conclusion}
+
+
+
+\newpage
 \appendix
 \section{Notation at a Glance}
 \begin{table}[H]

@@ -285,7 +285,7 @@ Each mathematical construction is introduced through its geometric meaning befor
 % Source: 02_foundations.tex
 \section{Mathematical Foundations}\label{sec:foundations}
 \subsection{A Physical Point and Its Coordinates}
-The coordinate-frame and pose concepts introduced in this subsection are standard robotics background; see Corke \cite[Chapter~2]{corke} for a textbook treatment.
+The coordinate-frame and pose concepts introduced in this subsection are standard robotics background; see Corke \cite{corke} for a textbook treatment.
 
 A physical point has a location in space. Coordinates describe that location relative to a chosen origin and three chosen axes. The same point can therefore have different coordinate values in different frames. Moving the coordinate frame changes the description of the point; it does not necessarily move the physical point.
 
@@ -298,7 +298,7 @@ The components are distances along the frame's axes. All components must use the
 The \emph{pose} of a rigid object describes both its position and its orientation. Position answers where the object's origin is. Orientation answers how its axes are directed. In three-dimensional space, a rigid pose has six degrees of freedom: three for translation and three for rotation. Some useful representations contain more than six numbers, because constraints connect their entries.
 
 \subsection{Reading the Vector and Matrix Expressions}
-The vector and matrix operations reviewed here are standard linear-algebra background; a supporting reference is Corke's linear-algebra appendix \cite[Appendix~B]{corke}.
+The vector and matrix operations reviewed here are standard linear-algebra background; a supporting reference is Corke's linear-algebra appendix \cite{corke}.
 
 A scalar is one number. A vector collects several numbers in a fixed order. A matrix arranges numbers in rows and columns. Multiplying a \(3\times3\) matrix by a three-component column vector produces another three-component vector. Each output component is the sum of the products along one row:
 \[

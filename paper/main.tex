@@ -185,23 +185,22 @@
     \vspace{2cm}
     {\Large Yana Osinchuk\par}
     \vspace{1cm}
-    {\Large Working draft --- October 2026\par}
+    {\Large October 2026\par}
     \vfill
 
-    \begin{flushleft}
-        First examiner \hfill Second examiner\\
-        \textit{To be confirmed} \hfill \textit{To be confirmed}\\
+\begin{flushleft}
+        The topic presented \hfill Second examiner\\
+        Prof.\ Dr.\ Thomas Maerz \hfill All present\\
     \end{flushleft}
 \end{titlepage}
 \pagenumbering{roman}
-
 % ------------------------------------------------------------
 % Declaration
 % ------------------------------------------------------------
 \newpage
 \section*{Declaration}
 \addcontentsline{toc}{section}{Declaration}
-The final declaration of authorship, including the disclosure of sources and aids, will be inserted using the wording required by Hochschule Darmstadt before submission.
+I affirm that I have independently authored this seminar document and have not used sources or aids other than those explicitly mentioned. Any directly quoted or paraphrased passages from other works are appropriately acknowledged.
 
 \vspace{2cm}
 Yana Osinchuk
@@ -235,7 +234,7 @@ Synthetische Daten mit bekannter Transformation erm\"oglichen eine Bewertung der
 \newpage
 \section*{Preface}
 \addcontentsline{toc}{section}{Preface}
-I would like to thank Prof.\ Dr.\ Thomas Maerz from the bottom of my heart for everything he has done for me. Throughout my studies, he has given his time, advice, and encouragement so generously. His continued willingness to help has meant more to me than I can fully express here.
+I would like to thank Prof. Dr. Thomas Maerz from the bottom of my heart for everything he has done for me. Throughout my studies, he has given his time, advice, and encouragement so generously. His continued willingness to help has meant more to me than I can fully express here.
 
 I am especially grateful for his help in finding my internship at the Hessian Agency for Nature Conservation, Environment and Geology (HLNUG), and for arranging an opportunity for me to work in the robotics laboratory. He also spoke with another professor to obtain the necessary permission for my work there. Each of these steps required his time and effort, and each made a real difference to my education and the opportunities available to me.
 
@@ -250,6 +249,7 @@ What I appreciate most is the kindness and care behind his support. He has helpe
 \pagenumbering{arabic}
 
 
+% Source: 01_introduction.tex
 \section{Introduction}
 \subsection{Motivation}
 Hearing is not the same as listening, just as capturing an image is not the same as understanding what it shows. In \emph{Vision}, David Marr describes seeing as \enquote{to know what is where by looking} \cite{marr2010}. For a robot, the question of where an object is has a practical consequence: its location must be expressed in coordinates that the robot can use to plan and execute a movement. This requires a geometric connection between the camera's observations and the robot's description of space.
@@ -282,6 +282,7 @@ Section~\ref{sec:foundations} begins with the meaning of a coordinate frame and 
 Each mathematical construction is introduced through its geometric meaning before the algebra is used. The explanations of coordinate transformations and robotic geometry follow the framework developed in Corke's \emph{Robotics, Vision and Control} \cite{corke}. The algorithm sections cite the original papers and distinguish them from the OpenCV implementation.
 
 
+% Source: 02_foundations.tex
 \section{Mathematical Foundations}\label{sec:foundations}
 \subsection{A Physical Point and Its Coordinates}
 A physical point has a location in space. Coordinates describe that location relative to a chosen origin and three chosen axes. The same point can therefore have different coordinate values in different frames. Moving the coordinate frame changes the description of the point; it does not necessarily move the physical point.
@@ -505,6 +506,7 @@ The null space of \(D\) is the set of vectors satisfying \(Dz=0\). A direction i
 These statements concern a particular algebraic residual. They do not automatically mean that the estimate minimises a geometric angle error or image reprojection error. Different representations and residuals can produce different estimates from noisy observations, even when their exact equations describe the same physical relationship.
 
 
+% Source: 03_formulation.tex
 \section{From Measurements to \texorpdfstring{\(AX=XB\)}{AX=XB}}\label{sec:formulation}
 \subsection{What the Camera Measures}
 A camera image contains two-dimensional pixel coordinates. A pixel position alone does not specify a complete three-dimensional point: points at different distances can lie on the same viewing ray. A calibration target of known geometry provides additional information. Its feature locations are known in a target coordinate frame, so their image projections can be used to estimate the target pose.
@@ -688,6 +690,7 @@ AX=XB=
 The matrices look different because their coordinates belong to different frames, yet they describe compatible motions. This is a mathematical example constructed from a known transformation, not a laboratory measurement. A full calibration requires a sufficiently informative collection of motions rather than this single example.
 
 
+% Source: 04_methods_separable.tex
 \section{The Five Calibration Methods}\label{sec:methods}
 \subsection{A Common Problem, Different Representations}
 All five methods seek one fixed rigid transformation consistent with a collection of motion equations,
@@ -852,6 +855,7 @@ Compared with Tsai's three-parameter system, this formulation keeps all four qua
 Horaud and Dornaika's paper also investigates broader formulations and nonlinear optimisation \cite{horaud}. The OpenCV method bearing their names implements the separable quaternion construction described here \cite{opencvsource}. The comparison in this thesis concerns that implementation; it does not evaluate every procedure presented in the original article.
 
 
+% Source: 05_methods_simultaneous.tex
 \subsection{Andreff--Horaud--Espiau: A Joint Linear System}\label{sec:andreff}
 \subsubsection{Representing a Matrix as a Vector}
 The method associated with Andreff, Horaud and Espiau uses a linear formulation involving both rotation entries and translation \cite{andreff}. To describe the OpenCV system precisely, define row-wise vectorisation:
@@ -1038,6 +1042,7 @@ Exact, sufficiently informative data can make these constructions agree on the s
 For a practical comparison, the method name must therefore be accompanied by the software version, data geometry, translation unit, valid output checks and validation criterion. A solver ranking without these conditions would be difficult to interpret.
 
 
+% Source: 06_experiment.tex
 \section{Proposed Experimental Protocol}\label{sec:experiment}
 \subsection{Laboratory Setup and Recorded Information}
 The laboratory experiment will be specified after confirming the robot, camera and mounting arrangement. The record will include the robot model and selected tool frame; camera model, resolution and settings; target type, measured dimensions and coordinate convention; mounting rigidity; translation unit; intrinsic calibration parameters; target-pose estimator; acquisition synchronisation; and OpenCV version.
@@ -1145,6 +1150,7 @@ The discussion will relate observed behaviour to the mathematical constructions 
 The final conclusion will answer the research question using the measured evidence. It will state which methods performed reliably under the tested conditions, what acquisition geometry was beneficial, and which limitations remain. No ranking or numerical result is asserted in this draft.
 
 
+% Source: 07_appendix.tex
 \appendix
 \section{Notation at a Glance}
 \begin{table}[H]
@@ -1197,6 +1203,7 @@ These equations constrain \(t_y,t_z\). Together, the two motion axes determine a
 This example illustrates why changing the axis of motion matters. Acquiring many rotations about \(z\) can improve the estimates of the constrained components, but cannot reveal the missing component along \(z\).
 
 
+% Source: 08_bibliography.tex
 \clearpage
 \printbibliography[heading=bibintoc,title={References}]
 
@@ -1217,4 +1224,3 @@ This example illustrates why changing the axis of motion matters. Acquiring many
 % \lstlistoflistings
 
 \end{document}
-

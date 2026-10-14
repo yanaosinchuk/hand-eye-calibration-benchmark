@@ -38,7 +38,7 @@
 \addbibresource{references.bib}
 % Computer Modern provides the Cyrillic glyphs for Ukrainian reference entries.
 \AtEveryBibitem{\iffieldequalstr{langid}{ukrainian}{\fontencoding{T2A}\fontfamily{cmr}\selectfont\renewcommand{\ttdefault}{cmtt}}{\fontencoding{T1}\fontfamily{lmr}\selectfont}}
-% A source directly below each display covers the complete displayed derivation.
+% Optional source for an equation-specific reference in a mixed-source discussion.
 \newcommand{\mathsource}[1]{\par\nobreak\vspace{-0.4\baselineskip}\noindent\hfill\cite{#1}\par}
 
 % ------------------------------------------------------------
@@ -160,13 +160,16 @@
 % ------------------------------------------------------------
 
 % ------------------------------------------------------------
-% Thesis draft settings
+% Pagination settings
 % ------------------------------------------------------------
 \widowpenalty=10000
 \clubpenalty=10000
 \displaywidowpenalty=10000
 \postdisplaypenalty=10000
-\newcommand{\pending}[1]{\textit{To be confirmed: #1.}}
+
+% DRAFT NOTE -- Unused drafting placeholder macro.
+% \newcommand{\pending}[1]{\textit{To be confirmed: #1.}}
+
 
 \begin{document}
 \pagenumbering{gobble}
@@ -193,9 +196,15 @@
     {\Large October 2026\par}
     \vfill
 
+
+% DRAFT NOTE -- Examiner placeholder; retain only the confirmed supervisor in the PDF.
+% \begin{flushleft}
+%         The topic presented \hfill Second examiner\\
+%         Prof.\ Dr.\ Thomas Maerz \hfill All present\\
+%     \end{flushleft}
 \begin{flushleft}
-        The topic presented \hfill Second examiner\\
-        Prof.\ Dr.\ Thomas Maerz \hfill All present\\
+        Supervisor\\
+        Prof.\ Dr.\ Thomas Maerz
     \end{flushleft}
 \end{titlepage}
 \pagenumbering{roman}
@@ -216,18 +225,30 @@ Yana Osinchuk
 \newpage
 \section*{Summary}
 \addcontentsline{toc}{section}{Summary}
-This thesis will compare five hand--eye calibration methods for a laboratory robotic vision system: Tsai--Lenz, Park--Martin, Horaud--Dornaika, Andreff--Horaud--Espiau and Daniilidis. The problem is formulated as a collection of rigid-transformation equations \(A_\ell X=XB_\ell\), where corresponding relative robot and camera motions are observed and the fixed transformation \(X\) is unknown. \cite{wenhardtde,opencv}
 
-The theoretical part develops coordinate frames, rigid transformations, rotation representations and least squares before deriving the calibration equation and each selected solver. The proposed experiments use shared acquisition data and preprocessing to examine pose count, pose diversity, repeatability and consistency on held-out observations. Synthetic data provide a known transformation for accuracy evaluation. \cite{robotikde,eauncertainty} 
+% DRAFT NOTE -- State the objective without presenting a planned comparison as a completed experiment.
+% This thesis will compare five hand--eye calibration methods for a laboratory robotic vision system: Tsai--Lenz, Park--Martin, Horaud--Dornaika, Andreff--Horaud--Espiau and Daniilidis.
+The objective of this thesis is to compare five hand--eye calibration methods for a laboratory robotic vision system: Tsai--Lenz, Park--Martin, Horaud--Dornaika, Andreff--Horaud--Espiau and Daniilidis. The problem is formulated as a collection of rigid-transformation equations \(A_\ell X=XB_\ell\), where corresponding relative robot and camera motions are observed and the fixed transformation \(X\) is unknown. \cite{wenhardtde,opencv}
+
+The theoretical part develops coordinate frames, rigid transformations, rotation representations and least squares before deriving the calibration equation and each selected solver.
+% DRAFT NOTE -- Provisional abstract description of experiments; complete after the study.
+% The proposed experiments use shared acquisition data and preprocessing to examine pose count, pose diversity, repeatability and consistency on held-out observations.
+ Synthetic data provide a known transformation for accuracy evaluation. \cite{robotikde,eauncertainty}
 
 
 \newpage
 \begin{otherlanguage}{ngerman}
 \section*{Zusammenfassung}
 \addcontentsline{toc}{section}{Zusammenfassung}
-Diese Bachelorarbeit soll f\"unf Verfahren der Hand-Auge-Kalibrierung f\"ur ein robotisches Bildverarbeitungssystem im Labor vergleichen: Tsai--Lenz, Park--Martin, Horaud--Dornaika, Andreff--Horaud--Espiau und Daniilidis. Die Kalibrierungsaufgabe wird als System von Gleichungen f\"ur starre Transformationen \(A_\ell X=XB_\ell\) formuliert. Dabei sind zusammengeh\"orige relative Bewegungen des Roboters und der Kamera bekannt, w\"ahrend die feste Transformation \(X\) bestimmt werden soll. \cite{wenhardtde,opencv}
 
-Der theoretische Teil erl\"autert zun\"achst Koordinatensysteme, starre Transformationen, Rotationsdarstellungen und die Methode der kleinsten Quadrate. Darauf aufbauend werden die Kalibrierungsgleichung und die f\"unf ausgew\"ahlten L\"osungsverfahren hergeleitet. Die geplanten Experimente untersuchen den Einfluss der Anzahl und r\"aumlichen Verteilung der Aufnahmeposen sowie die Wiederholbarkeit und die Konsistenz auf unabh\"angigen Validierungsaufnahmen. Alle Verfahren erhalten dieselben Messdaten und dieselbe Vorverarbeitung. Synthetische Daten mit bekannter Transformation erm\"oglichen eine Bewertung der Genauigkeit. \cite{robotikde,eauncertainty} 
+% DRAFT NOTE -- Parallel German statement of the research objective.
+% Diese Bachelorarbeit soll f\"unf Verfahren der Hand-Auge-Kalibrierung f\"ur ein robotisches Bildverarbeitungssystem im Labor vergleichen: Tsai--Lenz, Park--Martin, Horaud--Dornaika, Andreff--Horaud--Espiau und Daniilidis.
+Ziel dieser Bachelorarbeit ist der Vergleich von f\"unf Verfahren der Hand-Auge-Kalibrierung f\"ur ein robotisches Bildverarbeitungssystem im Labor: Tsai--Lenz, Park--Martin, Horaud--Dornaika, Andreff--Horaud--Espiau und Daniilidis. Die Kalibrierungsaufgabe wird als System von Gleichungen f\"ur starre Transformationen \(A_\ell X=XB_\ell\) formuliert. Dabei sind zusammengeh\"orige relative Bewegungen des Roboters und der Kamera bekannt, w\"ahrend die feste Transformation \(X\) bestimmt werden soll. \cite{wenhardtde,opencv}
+
+Der theoretische Teil erl\"autert zun\"achst Koordinatensysteme, starre Transformationen, Rotationsdarstellungen und die Methode der kleinsten Quadrate. Darauf aufbauend werden die Kalibrierungsgleichung und die f\"unf ausgew\"ahlten L\"osungsverfahren hergeleitet.
+% DRAFT NOTE -- Provisional German abstract description; complete after the study.
+% Die geplanten Experimente untersuchen den Einfluss der Anzahl und r\"aumlichen Verteilung der Aufnahmeposen sowie die Wiederholbarkeit und die Konsistenz auf unabh\"angigen Validierungsaufnahmen. Alle Verfahren erhalten dieselben Messdaten und dieselbe Vorverarbeitung.
+ Synthetische Daten mit bekannter Transformation erm\"oglichen eine Bewertung der Genauigkeit. \cite{robotikde,eauncertainty}
 \end{otherlanguage}
 
 % ------------------------------------------------------------
@@ -254,34 +275,59 @@ What I appreciate most is the kindness and care behind his support. He has taken
 % Source: 01_introduction.tex
 \section{Introduction}
 \subsection{Motivation}
-The guiding analogy of this thesis is that hearing is not the same as listening, just as capturing an image is not the same as understanding what it shows. In \emph{Vision}, David Marr describes seeing as \enquote{to know what is where by looking}. \cite{marr2010} For a robot, the question of where an object is has a practical consequence: its location must be expressed in coordinates that the robot can use to plan and execute a movement. This requires a geometric connection between the camera's observations and the robot's description of space. \cite{halconde}
+The guiding analogy of this thesis is that hearing is not the same as listening, just as capturing an image is not the same as understanding what it shows. In \emph{Vision}, David Marr describes seeing as \enquote{to know what is where by looking}. \cite{marr2010} For a robot, the question of where an object is has a practical consequence: its location must be expressed in coordinates that the robot can use to plan and execute a movement. This requires a geometric connection between the camera's observations and the robot's description of space.
 
-A robot and a camera describe the same physical world using different coordinate systems. The robot controller reports the position and orientation of the end effector relative to the robot base. A camera observes image features and, when a target of known geometry is visible, can estimate the target's position and orientation relative to the camera. To use these observations together, their coordinate systems must be connected by a geometric transformation. \cite{halconde}
+A robot and a camera describe the same physical world using different coordinate systems. The robot controller reports the position and orientation of the end effector relative to the robot base. A camera observes image features and, when a target of known geometry is visible, can estimate the target's position and orientation relative to the camera. To use these observations together, their coordinate systems must be connected by a geometric transformation.
 
-Hand--eye calibration estimates a fixed spatial relationship between the camera and a robot component. In an eye-in-hand arrangement, the camera moves with the end effector, and calibration determines their relative pose. In an eye-to-hand arrangement, the camera is fixed relative to the robot base, and a target attached to the end effector provides the connection. \cite{halconde} The basic calibration equation is \(AX=XB\): \(A\) and \(B\) describe corresponding relative motions, and \(X\) is the unknown fixed transformation. \cite{wenhardtde} The classical work of Tsai and Lenz provides an influential solution to this problem. \cite{tsai}
+Hand--eye calibration estimates a fixed spatial relationship between the camera and a robot component. In an eye-in-hand arrangement, the camera moves with the end effector, and calibration determines their relative pose. In an eye-to-hand arrangement, the camera is fixed relative to the robot base, and a target attached to the end effector provides the connection.  The basic calibration equation is \(AX=XB\): \(A\) and \(B\) describe corresponding relative motions, and \(X\) is the unknown fixed transformation.  The classical work of Tsai and Lenz provides an influential solution to this problem. \cite{tsai}
 
-The practical difficulty is that measured poses are imperfect. Image noise, target detection, camera calibration, robot pose uncertainty and the distribution of acquisition poses all affect the estimated transformation. \cite{wenhardtde,eauncertainty} The selected methods fit different algebraic residuals and impose their constraints differently. \cite{opencvsource} Comparing their behaviour on the same laboratory installation therefore requires both a clear mathematical formulation and a controlled experiment.
+The practical difficulty is that measured poses are imperfect. Image noise, target detection, camera calibration, robot pose uncertainty and the distribution of acquisition poses all affect the estimated transformation. \cite{eauncertainty} The selected methods fit different algebraic residuals and impose their constraints differently. \cite{opencvsource} Comparing their behaviour on the same laboratory installation therefore requires both a clear mathematical formulation and a controlled experiment. \cite{halconde,wenhardtde}
+
 
 \subsection{Objective and Research Question}
-This thesis will compare the five methods provided by OpenCV's hand--eye calibration interface: Tsai--Lenz, Park--Martin, Horaud--Dornaika, Andreff--Horaud--Espiau and Daniilidis. The laboratory robot at Hochschule Darmstadt will provide the practical setting. The central research question is:
+
+% DRAFT NOTE -- Research objective in present-tense form.
+% This thesis will compare the five methods provided by OpenCV's hand--eye calibration interface: Tsai--Lenz, Park--Martin, Horaud--Dornaika, Andreff--Horaud--Espiau and Daniilidis.
+This thesis aims to compare the five methods provided by OpenCV's hand--eye calibration interface: Tsai--Lenz, Park--Martin, Horaud--Dornaika, Andreff--Horaud--Espiau and Daniilidis.
+% DRAFT NOTE -- Laboratory-context placeholder; replace with the confirmed installation description.
+% The laboratory robot at Hochschule Darmstadt will provide the practical setting.
+ The central research question is:
 \begin{quote}
 How do the five OpenCV hand--eye calibration methods differ in validation performance and repeatability for the laboratory installation, and how do the number and diversity of calibration poses affect these differences?
 \end{quote}
-The comparison will use identical input observations and shared preprocessing. It will examine the influence of acquisition pose count, the distribution of orientations and positions, and repeated acquisitions. Synthetic data with a known transformation will supplement the laboratory measurements.
 
-The evaluated objects are particular software implementations. 
+% DRAFT NOTE -- Provisional experiment plan.
+% The comparison will use identical input observations and shared preprocessing. It will examine the influence of acquisition pose count, the distribution of orientations and positions, and repeated acquisitions. Synthetic data with a known transformation will supplement the laboratory measurements.
+
+
+The evaluated objects are particular software implementations.
 
 \subsection{Scope and Contribution}
-The contribution is a reproducible comparison supported by an accessible derivation of the calibration problem and its solvers. Camera intrinsic calibration and image-based target-pose estimation are necessary upstream stages. \cite{halconde} Their settings will be held fixed in the main algorithm comparison, because changes in these stages would otherwise make it difficult to attribute an observed difference to the hand--eye solver.
 
-The study will use the following operational definitions, with reference-based error and measurement variation kept distinct. Accuracy will be assessed through agreement with an independent reference. Consistency will describe how well an estimate agrees with additional observations. Repeatability will describe the variation between estimates obtained from repeated acquisitions under specified conditions. A small consistency error is useful evidence, but does not by itself establish absolute accuracy. \cite{eauncertainty}
+% DRAFT NOTE -- Describe the aim without claiming experimental findings.
+% The contribution is a reproducible comparison supported by an accessible derivation of the calibration problem and its solvers.
+The aim is a reproducible comparison supported by an accessible derivation of the calibration problem and its solvers. Camera intrinsic calibration and image-based target-pose estimation are necessary upstream stages. \cite{halconde}
+% DRAFT NOTE -- Experimental control recommendation; replace with the actual processing settings.
+% Their settings will be held fixed in the main algorithm comparison, because changes in these stages would otherwise make it difficult to attribute an observed difference to the hand--eye solver.
 
-No solver is assumed to be universally superior. The final conclusions will refer to the tested hardware, software version, acquisition conditions and evaluation criteria. The laboratory mounting arrangement, hardware models and target dimensions will be recorded before the experiment.
+
+The following operational definitions distinguish reference-based error from measurement variation. Accuracy is assessed through agreement with an independent reference. Consistency describes agreement with additional observations. Repeatability describes the variation between estimates obtained from repeated acquisitions under specified conditions. A small consistency error is useful evidence, but does not by itself establish absolute accuracy. \cite{eauncertainty}
+
+No solver is assumed to be universally superior.
+% DRAFT NOTE -- Instructions for the experimental record and final conclusions.
+% The final conclusions will refer to the tested hardware, software version, acquisition conditions and evaluation criteria. The laboratory mounting arrangement, hardware models and target dimensions will be recorded before the experiment.
+
 
 \subsection{Structure and Reading Guide}
-Section~\ref{sec:foundations} begins with the meaning of a coordinate frame and builds up the rotation and translation notation. Section~\ref{sec:formulation} explains how camera and robot measurements produce \(AX=XB\). Section~\ref{sec:methods} derives the five selected methods. Section~\ref{sec:experiment} proposes the experimental protocol and evaluation criteria.
+Section~\ref{sec:foundations} begins with the meaning of a coordinate frame and builds up the rotation and translation notation. Section~\ref{sec:formulation} explains how camera and robot measurements produce \(AX=XB\). Section~\ref{sec:methods} derives the five selected methods. Section~\ref{sec:experiment} defines the experimental framework and evaluation criteria.
 
-Each mathematical construction is introduced through its geometric meaning before the algebra is used. The explanations of coordinate transformations and robotic geometry follow the framework developed in Corke's \emph{Robotics, Vision and Control}. \cite{robotikde,corke} The algorithm sections cite the original papers and distinguish them from the OpenCV implementation. Intermediate algebra and constructed numerical examples are worked out in the notation of this thesis from the cited relations; their references identify the mathematical premises of the calculation. \cite{robotikde,corke}
+
+% DRAFT NOTE -- Editorial description of the exposition.
+% Each mathematical construction is introduced through its geometric meaning before the algebra is used.
+ The explanations of coordinate transformations and robotic geometry follow the framework developed in Corke's \emph{Robotics, Vision and Control}. \cite{robotikde,corke}
+% DRAFT NOTE -- Editorial citation and derivation guidance; source provenance is retained in docs/citation-map.md.
+% The algorithm sections cite the original papers and distinguish them from the OpenCV implementation. Intermediate algebra and constructed numerical examples are worked out in the notation of this thesis from the cited relations; their references identify the mathematical premises of the calculation. \cite{robotikde,corke}
+
 
 
 \newpage
@@ -307,7 +353,7 @@ The row therefore tells us how the input components contribute to one output com
 For vectors \(u,v\), their dot product is
 \[
 u^\top v=u_xv_x+u_yv_y+u_zv_z.
-\]\
+\]
 It equals \(\|u\|\|v\|\cos\phi\), where \(\phi\) is their angle, so a zero dot product between nonzero vectors means they are perpendicular. The Euclidean length is
 \[
 \|u\|=\sqrt{u^\top u}=\sqrt{u_x^2+u_y^2+u_z^2}.
@@ -407,7 +453,8 @@ T^{-1}=
 R^\top&-R^\top t\\0&1
 \end{pmatrix}.
 \end{equation}
-The inverse translation is \(-R^\top t\), not just \(-t\). \cite{robotikde} In the numerical example, it is \((-20,100,0)^\top\ \mathrm{mm}\). Applying the inverse to \((100,30,0)^\top\) recovers \((10,0,0)^\top\). \cite{robotikde}
+The inverse translation is \(-R^\top t\), not just \(-t\).  In the numerical example, it is \((-20,100,0)^\top\ \mathrm{mm}\). Applying the inverse to \((100,30,0)^\top\) recovers \((10,0,0)^\top\). \cite{robotikde}
+
 
 \subsection{Axis--Angle Representation}
 A three-dimensional rotation can be described by a unit axis \(n\) and an angle \(\theta\). The axis identifies the direction that stays unchanged. The angle describes the turn around that axis. A rotation vector is
@@ -443,7 +490,10 @@ R=nn^\top+\cos\theta(I_3-nn^\top)+\sin\theta[n]_\times.
 \]
 Since \([n]_\times^2=nn^\top-I_3\) for a unit \(n\), this is Equation~\eqref{eq:rodrigues}. The matrix formula therefore expresses an ordinary planar turn around one fixed axis.
 
-When \(\theta=0\), the rotation is the identity and its axis is not uniquely defined.  At \(\theta=\pi\), replacing \(n\) by \(-n\) describes the same rotation. Implementations must handle these cases carefully. \cite{robotikde}
+When \(\theta=0\), the rotation is the identity and its axis is not uniquely defined.  At \(\theta=\pi\), replacing \(n\) by \(-n\) describes the same rotation.
+% DRAFT NOTE -- Implementation reminder; the endpoint limitations themselves remain visible.
+% Implementations must handle these cases carefully.
+ \cite{robotikde}
 
 \subsection{Unit Quaternions}
 A unit quaternion represents a rotation using four numbers subject to one constraint. This thesis uses the scalar-first convention
@@ -452,7 +502,7 @@ q=\begin{pmatrix}q_0\\v\end{pmatrix}
 =\begin{pmatrix}\cos(\theta/2)\\n\sin(\theta/2)\end{pmatrix},
 \qquad q_0^2+v^\top v=1.
 \]
-The first entry is the scalar part and the remaining three entries form the vector part. Although this notation uses four numbers, it still represents three rotational degrees of freedom. The quaternions \(q\) and \(-q\) represent the same rotation. \cite{robotikde}
+The first entry is the scalar part and the remaining three entries form the vector part. Although this notation uses four numbers, it still represents three rotational degrees of freedom. The quaternions \(q\) and \(-q\) represent the same rotation.
 
 For \(a=(a_0,a_v)\) and \(b=(b_0,b_v)\), the product is
 \begin{equation}\label{eq:quaternion-product}
@@ -467,14 +517,15 @@ Quaternion multiplication represents composition of rotations in the same order 
 A vector \(p\) is represented by the pure quaternion \((0,p)\). Rotation gives
 \[
 (0,Rp)=q\otimes(0,p)\otimes q^*.
-\]\mathsource{bokhonovua}
+\]
 Expanding this expression yields
 \begin{equation}\label{eq:quaternion-rotation}
 R(q)=(q_0^2-v^\top v)I_3+2vv^\top+2q_0[v]_\times.
 \end{equation}
-Inserting \(q_0=\cos(\theta/2)\) and \(v=n\sin(\theta/2)\) into Equation~\eqref{eq:quaternion-rotation} gives the same Rodrigues rotation. \cite{bokhonovua} The identities \(q_0^2-\|v\|^2=\cos\theta\), \(2\sin^2(\theta/2)=1-\cos\theta\), and \(2\cos(\theta/2)\sin(\theta/2)=\sin\theta\) explain the half-angle convention. \cite{robotikde}
+Inserting \(q_0=\cos(\theta/2)\) and \(v=n\sin(\theta/2)\) into Equation~\eqref{eq:quaternion-rotation} gives the same Rodrigues rotation.  The identities \(q_0^2-\|v\|^2=\cos\theta\), \(2\sin^2(\theta/2)=1-\cos\theta\), and \(2\cos(\theta/2)\sin(\theta/2)=\sin\theta\) explain the half-angle convention.
 
-Quaternions are useful because several rotation equations become linear in their entries. The unit-length constraint is nevertheless essential. Quaternion signs must also be selected consistently when corresponding rotations are compared. \cite{horaud}
+Quaternions are useful because several rotation equations become linear in their entries. The unit-length constraint is nevertheless essential. Quaternion signs must also be selected consistently when corresponding rotations are compared. \cite{horaud,robotikde,bokhonovua}
+
 
 \subsection{Least Squares: Fitting Imperfect Equations}\label{sec:least-squares}
 An exact linear system has the form \(Dz=f\), with known matrix \(D\), known right-hand side \(f\), and unknown vector \(z\). Measurements usually produce equations that cannot all be satisfied exactly. Least squares finds a vector whose squared discrepancies are smallest:
@@ -485,7 +536,7 @@ The symbol \(\arg\min\) means the value of \(z\) at which the expression is mini
 
 For a numerical example constructed in this thesis, suppose two measurements of one length give \(z=10\) and \(z=12\). Least squares minimises \((z-10)^2+(z-12)^2\), whose minimum occurs at \(z=11\). Both observations contribute equally to this estimate. In calibration, the unknown vector contains rotation parameters, translation parameters, or both.
 
-An overdetermined system has more scalar equations than unknowns. More equations can improve the estimate, but only if they provide useful information.Repeating the same equation does not reveal a previously unobservable direction. 
+An overdetermined system has more scalar equations than unknowns. More equations can improve the estimate, but only if they provide useful information. Repeating the same equation does not reveal a previously unobservable direction.
 
 The singular value decomposition, abbreviated SVD, writes
 \[
@@ -493,7 +544,10 @@ D=U\Sigma V^\top.
 \]
 The nonnegative entries of \(\Sigma\) are singular values. They indicate how strongly the system constrains different combinations of unknowns. A zero singular value identifies an unconstrained direction. A very small singular value indicates a direction in which small measurement errors can cause large changes in the estimate.
 
-The rank of \(D\) is the number of independent column directions. Full column rank means that no column can be formed from the others. In that case, the least-squares solution is unique. In practice, an SVD or another stable factorisation should be used rather than explicitly forming \((D^\top D)^{-1}\). A pseudoinverse \(D^\dagger\) expresses this solution as \(\widehat z=D^\dagger f\), with an appropriate numerical tolerance for small singular values. \cite{wernerde}
+The rank of \(D\) is the number of independent column directions. Full column rank means that no column can be formed from the others. In that case, the least-squares solution is unique.
+% DRAFT NOTE -- Implementation recommendation; retain the SVD and pseudoinverse theory.
+% In practice, an SVD or another stable factorisation should be used rather than explicitly forming \((D^\top D)^{-1}\).
+ A pseudoinverse \(D^\dagger\) expresses this solution as \(\widehat z=D^\dagger f\), with an appropriate numerical tolerance for small singular values. \cite{wernerde}
 
 \subsection{Homogeneous Systems and Physical Constraints}
 Some calibration equations have the form \(Dz=0\). The zero vector always solves this equation, but cannot represent a unit quaternion. The physical constraint must therefore be included:
@@ -502,7 +556,7 @@ Some calibration equations have the form \(Dz=0\). The zero vector always solves
 \]
 An SVD solves this problem by selecting the right singular vector associated with the smallest singular value. Equivalently, it selects the unit eigenvector of \(D^\top D\) associated with the smallest eigenvalue.
 
-An eigenvector \(v\ne0\) of a matrix \(M\) satisfies \(Mv=\lambda v\). Multiplication by \(M\) keeps this vector on the same line and scales it by the eigenvalue \(\lambda\). For an example chosen in this thesis, let \(M=\operatorname{diag}(1,4)\).  Then, the two coordinate-axis vectors have eigenvalues \(1\) and \(4\). A unit vector \((x,y)^\top\) has quadratic value \(x^2+4y^2\), which is smallest along the first axis. The calibration eigenproblem uses the same principle in four dimensions.
+An eigenvector \(v\ne0\) of a matrix \(M\) satisfies \(Mv=\lambda v\). Multiplication by \(M\) keeps this vector on the same line and scales it by the eigenvalue \(\lambda\). For an example chosen in this thesis, let \(M=\operatorname{diag}(1,4)\).  Then the two coordinate-axis vectors have eigenvalues \(1\) and \(4\). A unit vector \((x,y)^\top\) has quadratic value \(x^2+4y^2\), which is smallest along the first axis. The calibration eigenproblem uses the same principle in four dimensions.
 
 The null space of \(D\) is the set of vectors satisfying \(Dz=0\). A direction in that space makes no change to the predicted left-hand side. Its dimension therefore describes how many linear freedoms remain before the physical constraints are imposed. \cite{bokhonovua,wernerde}
 
@@ -526,7 +580,7 @@ K=\begin{pmatrix}f_x&0&c_x\\0&f_y&c_y\\0&0&1\end{pmatrix}.
 \]
 The zero in the first row assumes the usual model with zero pixel-axis skew. Lens distortion adds another part of the projection model. It must be estimated and handled consistently, because distorted feature locations can bias the target-pose estimate.
 
-Let \(P_j\) be a known target point and \(C_k={}^{c}T_t^{(k)}\) the target-to-camera transformation in image \(k\). Transforming \(P_j\) by \(C_k\), then projecting it, predicts its image location. Pose estimation fits these predictions to detected image features. \cite{wenhardtde} 
+Let \(P_j\) be a known target point and \(C_k={}^{c}T_t^{(k)}\) the target-to-camera transformation in image \(k\). Transforming \(P_j\) by \(C_k\), then projecting it, predicts its image location. Pose estimation fits these predictions to detected image features. \cite{wenhardtde}
 
 OpenCV's perspective-n-point interface, \texttt{solvePnP}, belongs to this stage; it estimates the target pose in the camera frame. The later function \texttt{calibrateHandEye} estimates the relationship between the camera and the robot.
 
@@ -535,7 +589,7 @@ Known target dimensions establish the translation scale. If target points are en
 Moving a target through different positions and viewing angles can provide data for camera intrinsic calibration. For hand--eye calibration, however, the relative placement required by the selected mounting configuration must remain fixed, or its movement must be independently measured. Unrecorded target movement introduces an additional unknown into the calibration equations. \cite{halconde}
 
 \subsection{Frames and Available Poses}
-The following frame labels will be used:
+The coordinate-frame labels are:
 \begin{table}[H]
 \centering
 \begin{tabular}{ll}
@@ -559,15 +613,18 @@ which maps gripper coordinates into base coordinates. The image-processing pipel
 \[
 C_k={}^{c}T_t^{(k)},
 \]
-which maps target coordinates into camera coordinates. These are absolute poses relative to named frames. The matrices \(A\) and \(B\) in the hand--eye equation will instead be relative motions constructed from pairs of these observations.
+which maps target coordinates into camera coordinates. These are absolute poses relative to named frames. The matrices \(A\) and \(B\) in the hand--eye equation are instead relative motions constructed from pairs of these observations.
 
-Each image and robot pose must refer to the same acquisition. If the robot moves between the image exposure and the pose readout, the resulting pair may describe two different physical states. Synchronisation or acquisition after the robot has settled must therefore be documented. \cite{halconde}
+Each image and robot pose must refer to the same acquisition. If the robot moves between the image exposure and the pose readout, the resulting pair may describe two different physical states.
+% DRAFT NOTE -- Acquisition documentation reminder.
+% Synchronisation or acquisition after the robot has settled must therefore be documented.
+ \cite{halconde}
 
 \subsection{Eye-in-Hand: A Camera Attached to the Gripper}
 Assume that the camera is rigidly attached to the gripper and that the target is stationary relative to the robot base. The unknown transformation is
 \[
 X={}^{g}T_c,
-\]\
+\]
 and the constant target pose in the base frame is \(Y={}^{b}T_t\). A target point can be expressed in the base frame by following the chain
 \[
 \text{target}\ \longrightarrow\ \text{camera}\
@@ -608,7 +665,7 @@ Now assume that the camera is fixed relative to the robot base and that the targ
 \[
 X={}^{b}T_c,\qquad Z={}^{g}T_t.
 \]
-Here \(X\) is the desired camera-to-base transformation and \(Z\) is the constant target-to-gripper transformation. \cite{halconde,robotikde} Expressing the target pose in the base frame gives \(XC_k=G_kZ\), or
+Here \(X\) is the desired camera-to-base transformation and \(Z\) is the constant target-to-gripper transformation.  Expressing the target pose in the base frame gives \(XC_k=G_kZ\), or
 \begin{equation}\label{eq:eye-to-hand}
 G_k^{-1}XC_k=Z.
 \end{equation}
@@ -618,9 +675,13 @@ Set \(H_k=G_k^{-1}\). Applying the preceding derivation to \(H_kXC_k=Z\) yields
 \]
 so the robot relative motion is now \(A_{ij}=G_jG_i^{-1}\).
 
-This is a change in the geometric interpretation of the input poses. \cite{halconde,robotikde} For this formulation, the robot poses must be inverted before being passed to an interface using the standard eye-in-hand algebra. The returned matrix is then interpreted as camera-to-base. Variable names in the interface do not replace a derivation of the actual frame directions. \cite{opencv,halconde}
+This is a change in the geometric interpretation of the input poses.  For this formulation, the robot poses must be inverted before being passed to an interface using the standard eye-in-hand algebra. The returned matrix is then interpreted as camera-to-base. Variable names in the interface do not replace a derivation of the actual frame directions. \cite{opencv}
 
-The physical laboratory arrangement will determine which formulation is used. A freely moved, untracked target does not satisfy either fixed-target relationship automatically. \cite{halconde,robotikde}
+
+% DRAFT NOTE -- Mounting-configuration placeholder.
+% The physical laboratory arrangement will determine which formulation is used.
+ A freely moved, untracked target does not satisfy either fixed-target relationship automatically. \cite{halconde,robotikde}
+
 
 \subsection{Separating Rotation and Translation}
 Write one motion equation in blocks:
@@ -640,7 +701,7 @@ Equality therefore requires
 R_AR_X&=R_XR_B,\label{eq:rotation-handeye}\\
 (R_A-I_3)t_X&=R_Xt_B-t_A.\label{eq:translation-handeye}
 \end{align}
-The rotation equation does not contain \(t_X\). This permits a separable approach: estimate \(R_X\) first, insert it into the translation equation, and then solve for \(t_X\). A simultaneous approach estimates rotation and translation together. \cite{wenhardtde}
+The rotation equation does not contain \(t_X\). This permits a separable approach: estimate \(R_X\) first, insert it into the translation equation, and then solve for \(t_X\). A simultaneous approach estimates rotation and translation together.
 
 For several motion pairs, the translation equations are stacked:
 \begin{equation}\label{eq:translation-stack}
@@ -649,7 +710,8 @@ t_X=
 \underbrace{\begin{pmatrix}R_Xt_{B_1}-t_{A_1}\\ \vdots\\
 R_Xt_{B_m}-t_{A_m}\end{pmatrix}}_{f_t}.
 \end{equation}
-In noisy data, \(\widehat t_X=D_t^\dagger f_t\). This is the shared second stage of the three separable methods discussed below. \cite{wenhardtde,wernerde,opencvsource}
+In noisy data, \(\widehat t_X=D_t^\dagger f_t\). This is the shared second stage of the three separable methods discussed below. \cite{wernerde,opencvsource,wenhardtde}
+
 
 \subsection{What Makes a Dataset Informative?}
 Equation~\eqref{eq:rotation-handeye} can also be written as
@@ -705,11 +767,11 @@ A_\ell X\approx XB_\ell,\qquad \ell=1,\ldots,m.
 \]
 The index \(\ell\) numbers relative motion pairs. It does not denote a new independently acquired image. The approximation symbol acknowledges measurement error.
 
-Tsai--Lenz, Park--Martin and the separable Horaud--Dornaika implementation first estimate rotation and then translation. Andreff--Horaud--Espiau and Daniilidis couple the two parts in one formulation. This distinction alone does not determine which method will perform best: representations, residuals, data geometry and numerical implementation also matter. \cite{wenhardtde,opencvsource}
+Tsai--Lenz, Park--Martin and the separable Horaud--Dornaika implementation first estimate rotation and then translation. Andreff--Horaud--Espiau and Daniilidis couple the two parts in one formulation. This distinction alone does not determine which method performs best: representations, residuals, data geometry and numerical implementation also matter. \cite{wenhardtde,opencvsource}
 
 \subsection{Tsai--Lenz: A Three-Parameter Rotation System}\label{sec:tsai}
 \subsubsection{Geometric Idea}
-Corresponding relative rotations have the same angle, but their axes are expressed in different frames. Tsai and Lenz use quaternion-related rotation vectors to recover the fixed change of frame between these axes. Their construction reduces the rotational stage to a linear least-squares problem with three unknowns. \cite{tsai}
+Corresponding relative rotations have the same angle, but their axes are expressed in different frames. Tsai and Lenz use quaternion-related rotation vectors to recover the fixed change of frame between these axes. Their construction reduces the rotational stage to a linear least-squares problem with three unknowns.
 
 \subsubsection{Derivation of the Linear Equation}
 For one motion pair, let
@@ -729,7 +791,7 @@ Cancel \(a_0x=b_0x\) and use \(x\times b=-b\times x\). This yields
 \[
 (a+b)\times x=x_0(b-a).
 \]
-If \(x_0\ne0\), define \(u=x/x_0\). \cite{tsai} The equation is now linear:
+If \(x_0\ne0\), define \(u=x/x_0\).  The equation is now linear:
 \begin{equation}\label{eq:tsai-linear}
 [a+b]_\times u=b-a.
 \end{equation}
@@ -737,7 +799,7 @@ Stacking these equations over the motion pairs produces a system with three colu
 \[
 [P_A+P_B]_\times u=P_B-P_A.
 \]
-The factor of two therefore changes the notation, not the solution. \cite{tsai}
+The factor of two therefore changes the notation, not the solution.
 
 \subsubsection{Recovering Rotation and Translation}
 The unit-quaternion constraint fixes the scale:
@@ -751,23 +813,31 @@ x=\frac{u}{\sqrt{1+u^\top u}}.
 \end{equation}
 Equation~\eqref{eq:quaternion-rotation} converts the result into \(R_X\). Translation is then obtained from Equation~\eqref{eq:translation-stack}.
 
-For a numerical illustration chosen in this thesis, suppose the unknown rotation is \(90^\circ\) about \(z\). Then \(x_0=1/\sqrt2\), \(x=(0,0,1/\sqrt2)^\top\), and \(u=(0,0,1)^\top\). The three-vector \(u\) stores the rotation without being an axis-angle vector. \cite{tsai}
+For a numerical illustration chosen in this thesis, suppose the unknown rotation is \(90^\circ\) about \(z\). Then \(x_0=1/\sqrt2\), \(x=(0,0,1/\sqrt2)^\top\), and \(u=(0,0,1)^\top\). The three-vector \(u\) stores the rotation without being an axis-angle vector.
 
 \subsubsection{Limits and OpenCV Behaviour}
-The derivation uses matching scalar quaternion parts. \cite{tsai,robotikde} Noise makes the observed equality imperfect. \cite{opencvsource} It also divides by \(x_0\); a hand--eye rotation of exactly \(180^\circ\) has \(x_0=0\) and is outside this finite parametrisation. \cite{tsai,robotikde}
+The derivation uses matching scalar quaternion parts.  Noise makes the observed equality imperfect.  It also divides by \(x_0\); a hand--eye rotation of exactly \(180^\circ\) has \(x_0=0\) and is outside this finite parametrisation. \cite{robotikde}
 
-In the inspected OpenCV source, the Tsai implementation rejects relative pairs when either \(\|P_A\|\) or \(\|P_B\|\) is below \(0.3\) or above \(1.7\). \cite{opencvsource} Because \(\|P\|=2\sin(\theta/2)\), these thresholds correspond approximately to \(17.3^\circ\) and \(116.4^\circ\), for principal angles between zero and \(180^\circ\). \cite{opencvsource,robotikde} The retained pairs are also used in its translation stage. \cite{opencvsource}
 
-These are implementation-specific selection rules, not a universal definition of admissible calibration motions. \cite{opencvsource} They mean that the same absolute observations can yield different effective pair counts across solvers. \cite{opencvsource} The experiment must record the installed version and check whether its source uses these rules. A finite returned matrix alone does not establish that enough informative motions were available. \cite{wenhardtde,opencvsource}
+
+In the inspected OpenCV source, the Tsai implementation rejects relative pairs when either \(\|P_A\|\) or \(\|P_B\|\) is below \(0.3\) or above \(1.7\).  Because \(\|P\|=2\sin(\theta/2)\), these thresholds correspond approximately to \(17.3^\circ\) and \(116.4^\circ\), for principal angles between zero and \(180^\circ\). \cite{robotikde} The retained pairs are also used in its translation stage.
+
+These are implementation-specific selection rules, not a universal definition of admissible calibration motions.  They mean that the same absolute observations can yield different effective pair counts across solvers.
+% DRAFT NOTE -- OpenCV-version acquisition checklist.
+% The experiment must record the installed version and check whether its source uses these rules.
+ A finite returned matrix alone does not establish that enough informative motions were available. \cite{wenhardtde,tsai,opencvsource}
+
 
 \subsection{Park--Martin: Aligning Rotation Vectors}\label{sec:park}
 \subsubsection{The Matrix Logarithm}
-Park and Martin formulate calibration using the geometry of rigid motions. \cite{park} The rotational stage can be understood as aligning corresponding rotation vectors. \cite{park} A matrix exponential maps a skew-symmetric matrix to a rotation:
+Park and Martin formulate calibration using the geometry of rigid motions.  The rotational stage can be understood as aligning corresponding rotation vectors.  A matrix exponential maps a skew-symmetric matrix to a rotation:
 \[
 R=\exp([r]_\times)
 =I_3+[r]_\times+\frac{[r]_\times^2}{2!}+\cdots.
-\]\mathsource{robotikde,bokhonovua}
-For rotations away from the angle ambiguities, the matrix logarithm reverses this mapping: \(\log R=[r]_\times\). \cite{robotikde,bokhonovua} The operation \({}^\vee\) extracts the vector from a skew-symmetric matrix, so \((\log R)^\vee=r\). \cite{robotikde,bokhonovua}
+\]
+For rotations away from the angle ambiguities, the matrix logarithm reverses this mapping: \(\log R=[r]_\times\).  The operation \({}^\vee\) extracts the vector from a skew-symmetric matrix, so \((\log R)^\vee=r\). \cite{robotikde}
+
+
 
 Combining the cited axis--angle and matrix-exponential relations gives, for \(0<\theta<\pi\),
 \[
@@ -777,132 +847,153 @@ R_{32}-R_{23}\\R_{13}-R_{31}\\R_{21}-R_{12}
 \end{pmatrix},
 \qquad
 \theta=\arccos\left(\frac{\operatorname{tr}R-1}{2}\right).
-\]\mathsource{robotikde,bokhonovua}
-Here \(\operatorname{tr}R\) is the sum of the diagonal entries. \cite{robotikde,bokhonovua} The displayed quotient has a zero denominator at \(\theta=0\) and \(\theta=\pi\), so those endpoint cases require a separate expression. \cite{robotikde,bokhonovua}
+\]
+Here \(\operatorname{tr}R\) is the sum of the diagonal entries.  The displayed quotient has a zero denominator at \(\theta=0\) and \(\theta=\pi\), so those endpoint cases require a separate expression. \cite{robotikde}
+
+
 
 \subsubsection{From Conjugation to Vector Alignment}
 Since \(R_A=R_XR_BR_X^\top\), compatible logarithms satisfy
 \[
 \log R_A=R_X(\log R_B)R_X^\top.
-\]\mathsource{park}
+\]
 The identity \(R[v]_\times R^\top=[Rv]_\times\) then gives
 \begin{equation}\label{eq:park-alignment}
 a_\ell=R_Xb_\ell,\qquad
 a_\ell=(\log R_{A_\ell})^\vee,\quad
 b_\ell=(\log R_{B_\ell})^\vee.
-\end{equation}\mathsource{park}
-Thus the problem becomes: find one rotation that best aligns two collections of three-dimensional vectors. \cite{park}
+\end{equation}
+Thus the problem becomes: find one rotation that best aligns two collections of three-dimensional vectors.
 
 For equal weights, minimise
 \[
 \sum_{\ell=1}^{m}\|a_\ell-Rb_\ell\|^2,
 \qquad R\in\mathrm{SO}(3).
-\]\mathsource{park}
+\]
 Expanding the squares shows that only the cross term depends on \(R\):
 \[
 \sum_\ell\bigl(\|a_\ell\|^2+\|b_\ell\|^2\bigr)
 -2\operatorname{tr}(R^\top S),\qquad
 S=\sum_\ell a_\ell b_\ell^\top.
-\]\mathsource{park}
-The required rotation therefore maximises \(\operatorname{tr}(R^\top S)\). \cite{park}
+\]
+The required rotation therefore maximises \(\operatorname{tr}(R^\top S)\).
 
 \subsubsection{SVD Solution and Translation}
 If \(S=U\Sigma V^\top\), the proper-rotation solution is
 \begin{equation}\label{eq:proper-rotation}
 \widehat R_X=
 U\operatorname{diag}\bigl(1,1,\det(UV^\top)\bigr)V^\top.
-\end{equation}\mathsource{wernerde,bokhonovua}
-The determinant factor prevents a reflected coordinate system. \cite{wernerde,bokhonovua} Translation is then fitted with Equation~\eqref{eq:translation-stack}. \cite{wenhardtde,opencvsource}
+\end{equation}
+The determinant factor prevents a reflected coordinate system.  Translation is then fitted with Equation~\eqref{eq:translation-stack}. \cite{wenhardtde}
 
-The following argument derives the determinant correction from the cited properties of orthogonal matrices and SVD. Assume that the singular values satisfy \(\sigma_1\geq\sigma_2\geq\sigma_3\geq0\), and set \(H=U^\top RV\). \cite{wernerde,bokhonovua} Then \(H\) is orthogonal, \(\det H=\det(UV^\top)\), and the quantity to maximise is \(\sum_i\sigma_iH_{ii}\). \cite{wernerde,bokhonovua} For \(\det H=1\), every diagonal entry is at most one, and \(H=I_3\) reaches the upper bound. \cite{wernerde,bokhonovua} For \(\det H=-1\), an orthogonal three-dimensional matrix has \(\operatorname{tr}H\leq1\), so
+
+% DRAFT NOTE -- Editorial lead-in to the proof; retain the proof itself.
+% The following argument derives the determinant correction from the cited properties of orthogonal matrices and SVD.
+ Assume that the singular values satisfy \(\sigma_1\geq\sigma_2\geq\sigma_3\geq0\), and set \(H=U^\top RV\).  Then \(H\) is orthogonal, \(\det H=\det(UV^\top)\), and the quantity to maximise is \(\sum_i\sigma_iH_{ii}\).  For \(\det H=1\), every diagonal entry is at most one, and \(H=I_3\) reaches the upper bound.  For \(\det H=-1\), an orthogonal three-dimensional matrix has \(\operatorname{tr}H\leq1\), so
 \[
 \sum_i\sigma_iH_{ii}
 =\sigma_3\operatorname{tr}H+(\sigma_1-\sigma_3)H_{11}
 +(\sigma_2-\sigma_3)H_{22}
 \leq\sigma_1+\sigma_2-\sigma_3.
-\]\mathsource{wernerde,bokhonovua}
-The choice \(H=\operatorname{diag}(1,1,-1)\) reaches this bound. \cite{wernerde,bokhonovua} Transforming back gives Equation~\eqref{eq:proper-rotation}. \cite{wernerde,bokhonovua} This is a derivation in the notation of this thesis, based on the cited SVD and orthogonality properties.
+\]
+The choice \(H=\operatorname{diag}(1,1,-1)\) reaches this bound.  Transforming back gives Equation~\eqref{eq:proper-rotation}.
+% DRAFT NOTE -- Editorial provenance note; retain the mathematical argument and its references.
+% This is a derivation in the notation of this thesis, based on the cited SVD and orthogonality properties.
 
-This SVD expression makes the vector-alignment geometry explicit. \cite{wernerde,bokhonovua} The inspected OpenCV Park routine uses the corresponding inverse-square-root construction. \cite{opencvsource,wernerde} With \(M=\sum_\ell b_\ell a_\ell^\top\), it computes
+
+This SVD expression makes the vector-alignment geometry explicit.  The inspected OpenCV Park routine uses the corresponding inverse-square-root construction.  With \(M=\sum_\ell b_\ell a_\ell^\top\), it computes
 \[
 R_X=(M^\top M)^{-1/2}M^\top
-\]\mathsource{opencvsource}
-through an eigendecomposition. \cite{opencvsource} For a full-rank, compatible system this gives the same proper rotation. \cite{opencvsource,wernerde} It does not have the same explicit determinant correction as Equation~\eqref{eq:proper-rotation}. \cite{opencvsource,wernerde} Its inverse-square-root calculation can also be problematic when an eigenvalue is zero or very small. \cite{opencvsource,wernerde}
+\]
+through an eigendecomposition.  For a full-rank, compatible system this gives the same proper rotation.  It does not have the same explicit determinant correction as Equation~\eqref{eq:proper-rotation}.  Its inverse-square-root calculation can also be problematic when an eigenvalue is zero or very small.
 
-The geometric argument explains why nonparallel axis information matters. \cite{wenhardtde,wernerde} Numerical failure of this particular formula should nevertheless be distinguished from a general proof that the underlying calibration problem is unobservable. \cite{wenhardtde,wernerde} The experiment will validate returned rotation matrices and record failures rather than silently changing a solver's output.
+The geometric argument explains why nonparallel axis information matters.
+% DRAFT NOTE -- State the mathematical limitation directly.
+% Numerical failure of this particular formula should nevertheless be distinguished from a general proof that the underlying calibration problem is unobservable.
+Numerical failure of this particular formula does not establish that the underlying calibration problem is unobservable. \cite{wenhardtde,park,bokhonovua,wernerde,opencvsource}
+
+
+% DRAFT NOTE -- Planned solver-validation procedure.
+% The experiment will validate returned rotation matrices and record failures rather than silently changing a solver's output.
+
 
 \subsection{Horaud--Dornaika: A Unit-Quaternion Eigenproblem}\label{sec:horaud}
 \subsubsection{Quaternion Multiplication as a Matrix}
-Quaternion products are linear in either factor when the other is known. \cite{bokhonovua,horaud} For \(q=(q_0,v)\), define
+Quaternion products are linear in either factor when the other is known.  For \(q=(q_0,v)\), define
 \begin{equation}\label{eq:quaternion-matrices}
 L(q)=
 \begin{pmatrix}q_0&-v^\top\\v&q_0I_3+[v]_\times\end{pmatrix},
 \quad
 \mathcal R(q)=
 \begin{pmatrix}q_0&-v^\top\\v&q_0I_3-[v]_\times\end{pmatrix}.
-\end{equation}\mathsource{bokhonovua,horaud}
-Then \(L(a)b=a\otimes b\) and \(\mathcal R(b)a=a\otimes b\). \cite{bokhonovua,horaud} The symbol \(\mathcal R\) denotes right quaternion multiplication and must not be confused with a \(3\times3\) rotation matrix. \cite{bokhonovua,horaud}
+\end{equation}
+Then \(L(a)b=a\otimes b\) and \(\mathcal R(b)a=a\otimes b\).  The symbol \(\mathcal R\) denotes right quaternion multiplication and must not be confused with a \(3\times3\) rotation matrix.
 
 The rotational hand--eye equation becomes
 \[
 \bigl(L(q_{A_\ell})-\mathcal R(q_{B_\ell})\bigr)q_X=0.
-\]\mathsource{bokhonovua,horaud}
-Each motion gives four scalar equations in the four entries of \(q_X\). \cite{bokhonovua,horaud}
+\]
+Each motion gives four scalar equations in the four entries of \(q_X\).
 
 \subsubsection{Enforcing Unit Length}
-Let \(D_\ell=L(q_{A_\ell})-\mathcal R(q_{B_\ell})\). \cite{horaud} For noisy data, solve
+Let \(D_\ell=L(q_{A_\ell})-\mathcal R(q_{B_\ell})\).  For noisy data, solve
 \begin{equation}\label{eq:horaud}
 \min_{\|q_X\|=1}\sum_\ell\|D_\ell q_X\|^2
 =\min_{\|q_X\|=1}q_X^\top M_q q_X,
 \qquad M_q=\sum_\ell D_\ell^\top D_\ell.
-\end{equation}\mathsource{horaud}
+\end{equation}
 If \(M_q\) has orthonormal eigenvectors \(v_j\) with eigenvalues \(\lambda_j\), a unit vector \(q=\sum_j c_jv_j\) satisfies \(\sum_jc_j^2=1\) and
 \[
 q^\top M_q q=\sum_j\lambda_jc_j^2.
-\]\mathsource{bokhonovua,wernerde}
-This expression is smallest when the coefficient is concentrated on an eigenvector with the smallest eigenvalue. \cite{bokhonovua,wernerde} The solution is therefore that unit eigenvector, up to the equivalent sign. \cite{bokhonovua,wernerde}
+\]
+This expression is smallest when the coefficient is concentrated on an eigenvector with the smallest eigenvalue.  The solution is therefore that unit eigenvector, up to the equivalent sign. \cite{wernerde}
 
-The quaternion is converted to \(R_X\), and the translation is fitted using Equation~\eqref{eq:translation-stack}. \cite{horaud} A well-separated smallest eigenvalue supports a stable rotational estimate; nearly indistinguishable eigenvalues indicate sensitivity. \cite{bokhonovua,wernerde}
+
+
+The quaternion is converted to \(R_X\), and the translation is fitted using Equation~\eqref{eq:translation-stack}.  A well-separated smallest eigenvalue supports a stable rotational estimate; nearly indistinguishable eigenvalues indicate sensitivity. \cite{wernerde}
 
 \subsubsection{Interpretation and Method Scope}
-Compared with Tsai's three-parameter system, this formulation keeps all four quaternion entries and imposes unit length directly. \cite{robotikde,horaud} It does not divide by the scalar part of the unknown quaternion. \cite{robotikde,horaud} Consistent signs for corresponding input quaternions remain necessary, especially near \(180^\circ\) rotations. \cite{robotikde,horaud}
+Compared with Tsai's three-parameter system, this formulation keeps all four quaternion entries and imposes unit length directly.  It does not divide by the scalar part of the unknown quaternion.  Consistent signs for corresponding input quaternions remain necessary, especially near \(180^\circ\) rotations. \cite{robotikde}
 
-Horaud and Dornaika's paper also investigates broader formulations and nonlinear optimisation. \cite{horaud} The OpenCV method bearing their names implements the separable quaternion construction described here. \cite{opencvsource} The comparison in this thesis concerns that implementation; it does not evaluate every procedure presented in the original article.
+
+
+Horaud and Dornaika's paper also investigates broader formulations and nonlinear optimisation.  The OpenCV method bearing their names implements the separable quaternion construction described here. \cite{opencvsource} The comparison in this thesis concerns that implementation; it does not evaluate every procedure presented in the original article. \cite{bokhonovua,horaud}
+
 
 
 % Source: 05_methods_simultaneous.tex
 \subsection{Andreff--Horaud--Espiau: A Joint Linear System}\label{sec:andreff}
 \subsubsection{Representing a Matrix as a Vector}
-The method associated with Andreff, Horaud and Espiau uses a linear formulation involving both rotation entries and translation. \cite{andreff,opencvsource} To describe the OpenCV system precisely, define row-wise vectorisation:
+The method associated with Andreff, Horaud and Espiau uses a linear formulation involving both rotation entries and translation.  To describe the OpenCV system precisely, define row-wise vectorisation:
 \[
 r=\operatorname{rvec}(R_X)=
 (r_{11},r_{12},r_{13},r_{21},r_{22},r_{23},
 r_{31},r_{32},r_{33})^\top.
-\]\mathsource{andreff,opencvsource}
-This stacks the rows of the matrix. \cite{andreff,opencvsource} It differs from the column-wise vectorisation convention often used elsewhere. \cite{andreff,opencvsource}
+\]
+This stacks the rows of the matrix.  It differs from the column-wise vectorisation convention often used elsewhere.
 
-The Kronecker product \(U\otimes V\) replaces each entry \(u_{ij}\) of \(U\) by the block \(u_{ij}V\). \cite{andreff,opencvsource} For example,
+The Kronecker product \(U\otimes V\) replaces each entry \(u_{ij}\) of \(U\) by the block \(u_{ij}V\).  For example,
 \[
 \begin{pmatrix}u_{11}&u_{12}\\u_{21}&u_{22}\end{pmatrix}
 \otimes V
 =\begin{pmatrix}u_{11}V&u_{12}V\\u_{21}V&u_{22}V\end{pmatrix}.
-\]\mathsource{andreff,opencvsource}
+\]
 Its purpose here is to turn multiplication on both sides of a matrix into multiplication of a single vector:
 \[
 \operatorname{rvec}(URV^\top)
 =(U\otimes V)\operatorname{rvec}(R).
-\]\mathsource{andreff,opencvsource}
-The expression is just an organised collection of the same scalar equations. \cite{andreff,opencvsource}
+\]
+The expression is just an organised collection of the same scalar equations.
 
 \subsubsection{Building the Twelve-Unknown System}
-Rewrite the rotation equation as \(R_AR_XR_B^\top=R_X\). \cite{andreff,opencvsource} Row-wise vectorisation gives
+Rewrite the rotation equation as \(R_AR_XR_B^\top=R_X\).  Row-wise vectorisation gives
 \[
 (I_9-R_A\otimes R_B)r=0.
-\]\mathsource{andreff,opencvsource}
+\]
 The translation equation can be rearranged as
 \[
 R_Xt_B+(I_3-R_A)t_X=t_A.
-\]\mathsource{andreff,opencvsource}
+\]
 Since \(R_Xt_B=(I_3\otimes t_B^\top)r\), one motion produces
 \begin{equation}\label{eq:andreff}
 \begin{pmatrix}
@@ -912,126 +1003,142 @@ I_3\otimes t_B^\top&I_3-R_A
 \begin{pmatrix}r\\t_X\end{pmatrix}
 =
 \begin{pmatrix}0_{9\times1}\\t_A\end{pmatrix}.
-\end{equation}\mathsource{andreff,opencvsource}
-There are twelve unknown scalar entries: nine entries of \(R_X\) and three of \(t_X\). \cite{andreff,opencvsource} The system is stacked over motion pairs and solved by least squares. \cite{andreff,opencvsource} Translation measurements therefore contribute to the rotational estimate as well as to the translational estimate. \cite{andreff,opencvsource}
+\end{equation}
+There are twelve unknown scalar entries: nine entries of \(R_X\) and three of \(t_X\).  The system is stacked over motion pairs and solved by least squares.  Translation measurements therefore contribute to the rotational estimate as well as to the translational estimate.
 
 \subsubsection{Restoring a Physical Rotation}
-The linear solve treats the nine rotation entries as independent. \cite{andreff,opencvsource} Its reshaped output \(R_{\mathrm{raw}}\) may therefore violate orthogonality. \cite{andreff,opencvsource} A proper rotation must be recovered. \cite{andreff,opencvsource}
+The linear solve treats the nine rotation entries as independent.  Its reshaped output \(R_{\mathrm{raw}}\) may therefore violate orthogonality.  A proper rotation must be recovered.
 
 If \(R_{\mathrm{raw}}=U\Sigma V^\top\), projection to a proper rotation uses
 \[
 \widehat R_X=
 U\operatorname{diag}\bigl(1,1,\det(UV^\top)\bigr)V^\top.
-\]\mathsource{wernerde,bokhonovua}
-The Frobenius matrix norm is the square root of the sum of squared entries. \cite{wernerde,bokhonovua} To check the closest-rotation interpretation here, expand \(\|R_{\mathrm{raw}}-R\|_F^2=\|R_{\mathrm{raw}}\|_F^2+3-2\operatorname{tr}(R^\top R_{\mathrm{raw}})\) for \(R\in\mathrm{SO}(3)\). \cite{wernerde,bokhonovua} Minimising this distance therefore gives exactly the trace maximisation derived in Section~\ref{sec:park}. \cite{wernerde,bokhonovua} The inspected OpenCV normalisation also adjusts the determinant scale before its SVD projection. \cite{opencvsource}
+\]
+The Frobenius matrix norm is the square root of the sum of squared entries.  To check the closest-rotation interpretation here, expand \(\|R_{\mathrm{raw}}-R\|_F^2=\|R_{\mathrm{raw}}\|_F^2+3-2\operatorname{tr}(R^\top R_{\mathrm{raw}})\) for \(R\in\mathrm{SO}(3)\).  Minimising this distance therefore gives exactly the trace maximisation derived in Section~\ref{sec:park}.  The inspected OpenCV normalisation also adjusts the determinant scale before its SVD projection. \cite{wernerde,bokhonovua}
 
-The implementation keeps the translation from the joint linear solve; it does not automatically refit translation after correcting rotation. \cite{opencvsource} Consequently, the final rigid transformation need not minimise the same residual as the unconstrained linear solution. \cite{andreff,opencvsource} Replacing that translation by a separately refitted value would constitute a modified procedure and must be labelled separately.
+
+
+The implementation keeps the translation from the joint linear solve; it does not automatically refit translation after correcting rotation.  Consequently, the final rigid transformation need not minimise the same residual as the unconstrained linear solution.
+% DRAFT NOTE -- Reporting instruction; keep the mathematical distinction visible.
+% Replacing that translation by a separately refitted value would constitute a modified procedure and must be labelled separately.
+Refitting translation after the rotation correction changes the procedure.
 
 \subsubsection{Consequences for the Comparison}
-Equation~\eqref{eq:andreff} combines dimensionless rotation equations with equations containing lengths. \cite{opencvsource,wernerde} Changing all translations from metres to millimetres scales the latter equations relative to the former. \cite{opencvsource,wernerde} Although the exact physical equations remain equivalent, the relative weighting of their noisy residuals changes. \cite{opencvsource,wernerde} The length unit must therefore be fixed and reported.
+Equation~\eqref{eq:andreff} combines dimensionless rotation equations with equations containing lengths.  Changing all translations from metres to millimetres scales the latter equations relative to the former.  Although the exact physical equations remain equivalent, the relative weighting of their noisy residuals changes. \cite{wernerde}
 
-The joint linear system also needs suitable translational excitation. \cite{opencvsource,wernerde} For example, if every \(t_A\) and \(t_B\) is zero, the right-hand side is zero and the unconstrained least-squares solution can collapse to the zero vector. \cite{opencvsource,wernerde} Subsequent rotation normalisation cannot recover a meaningful estimate from a zero matrix. \cite{opencvsource,wernerde} This is a limitation of this linear construction for such data, distinct from the rotational information that may be present in the motions. \cite{opencvsource,wernerde}
+% DRAFT NOTE -- Experimental reporting reminder; retain the explanation of unit-dependent residual weights.
+% The length unit must therefore be fixed and reported.
+
+
+The joint linear system also needs suitable translational excitation.  For example, if every \(t_A\) and \(t_B\) is zero, the right-hand side is zero and the unconstrained least-squares solution can collapse to the zero vector.  Subsequent rotation normalisation cannot recover a meaningful estimate from a zero matrix.  This is a limitation of this linear construction for such data, distinct from the rotational information that may be present in the motions. \cite{wernerde,andreff,opencvsource}
+
+
+
 
 \subsection{Daniilidis: A Dual Quaternion for the Full Pose}\label{sec:daniilidis}
 \subsubsection{Why a Dual Quaternion?}
-A unit quaternion represents rotation. \cite{robotikde} A dual quaternion adds a second quaternion that carries translation in a compatible form. \cite{daniilidis} Daniilidis uses this representation to formulate hand--eye calibration jointly. \cite{daniilidis}
+A unit quaternion represents rotation. \cite{robotikde} A dual quaternion adds a second quaternion that carries translation in a compatible form.  Daniilidis uses this representation to formulate hand--eye calibration jointly.
 
-Introduce a formal symbol \(\varepsilon\) satisfying \(\varepsilon^2=0\), with \(\varepsilon\ne0\). \cite{daniilidis} It is not an extra physical coordinate. \cite{daniilidis} It is a device for keeping two coupled parts of an expression. \cite{daniilidis} Multiplication obeys
+Introduce a formal symbol \(\varepsilon\) satisfying \(\varepsilon^2=0\), with \(\varepsilon\ne0\).  It is not an extra physical coordinate.  It is a device for keeping two coupled parts of an expression.  Multiplication obeys
 \[
 (a+\varepsilon a')(b+\varepsilon b')
 =ab+\varepsilon(ab'+a'b),
-\]\mathsource{daniilidis}
-because the product containing \(\varepsilon^2\) vanishes. \cite{daniilidis}
+\]
+because the product containing \(\varepsilon^2\) vanishes.
 
-For a rigid transformation \((R,t)\), let \(q\) be the unit quaternion of \(R\), and let \(p=(0,t)\) be the pure translation quaternion. \cite{daniilidis} Define
+For a rigid transformation \((R,t)\), let \(q\) be the unit quaternion of \(R\), and let \(p=(0,t)\) be the pure translation quaternion.  Define
 \begin{equation}\label{eq:dualquat}
 Q=q+\varepsilon d,\qquad d=\frac12 p\otimes q.
-\end{equation}\mathsource{daniilidis}
-The real part \(q\) describes rotation. \cite{daniilidis} The dual part \(d\) combines translation with that rotation. \cite{daniilidis} It is not simply the translation vector padded with a zero. \cite{daniilidis}
+\end{equation}
+The real part \(q\) describes rotation.  The dual part \(d\) combines translation with that rotation.  It is not simply the translation vector padded with a zero.
 
 The physical constraints are
 \begin{equation}\label{eq:dual-constraints}
 q^\top q=1,\qquad q^\top d=0.
-\end{equation}\mathsource{daniilidis}
-The second constraint follows from the construction: the scalar part of \(d\otimes q^*\) equals \(q^\top d\), while \(d\otimes q^*=\tfrac12(0,t)\) has scalar part zero. \cite{daniilidis} Translation is recovered by
+\end{equation}
+The second constraint follows from the construction: the scalar part of \(d\otimes q^*\) equals \(q^\top d\), while \(d\otimes q^*=\tfrac12(0,t)\) has scalar part zero.  Translation is recovered by
 \begin{equation}\label{eq:dual-translation}
 (0,t)=2d\otimes q^*.
-\end{equation}\mathsource{daniilidis}
-These relations explain why merely normalising an arbitrary eight-component vector does not make it a valid rigid-motion dual quaternion. \cite{daniilidis}
+\end{equation}
+These relations explain why merely normalising an arbitrary eight-component vector does not make it a valid rigid-motion dual quaternion.
 
 \subsubsection{Expanding the Hand--Eye Equation}
 With \(Q_A=q_A+\varepsilon d_A\), and similarly for \(Q_B,Q_X\), the equation is
 \[
 Q_A\otimes Q_X=Q_X\otimes Q_B.
-\]\mathsource{daniilidis}
+\]
 Equating the real and dual parts gives
 \begin{align}
 q_A\otimes q_X&=q_X\otimes q_B,\\
 q_A\otimes d_X+d_A\otimes q_X
 &=q_X\otimes d_B+d_X\otimes q_B.
-\end{align}\mathsource{daniilidis}
-The second equation couples rotation and translation. \cite{daniilidis} Using the multiplication matrices from Equation~\eqref{eq:quaternion-matrices}, the full equations are
+\end{align}
+The second equation couples rotation and translation.  Using the multiplication matrices from Equation~\eqref{eq:quaternion-matrices}, the full equations are
 \[
 \begin{pmatrix}
 L(q_A)-\mathcal R(q_B)&0\\
 L(d_A)-\mathcal R(d_B)&L(q_A)-\mathcal R(q_B)
 \end{pmatrix}
 \begin{pmatrix}q_X\\d_X\end{pmatrix}=0.
-\]\mathsource{daniilidis}
-This form makes the coupling explicit. \cite{daniilidis}
+\]
+This form makes the coupling explicit.
 
-For compatible exact motions, their real scalar parts match, and their dual scalar parts also match after consistent sign selection. \cite{daniilidis} Write the vector parts as \(a,b\) for \(q_A,q_B\), and \(a',b'\) for \(d_A,d_B\). \cite{daniilidis} A standard six-row construction, used in the inspected OpenCV implementation, is
+For compatible exact motions, their real scalar parts match, and their dual scalar parts also match after consistent sign selection.  Write the vector parts as \(a,b\) for \(q_A,q_B\), and \(a',b'\) for \(d_A,d_B\).  A standard six-row construction, used in the inspected OpenCV implementation, is
 \begin{equation}\label{eq:daniilidis-system}
 T_\ell=
 \begin{pmatrix}
 a-b&[a+b]_\times&0_{3\times1}&0_{3\times3}\\
 a'-b'&[a'+b']_\times&a-b&[a+b]_\times
 \end{pmatrix}.
-\end{equation}\mathsource{daniilidis,opencvsource}
-Its columns correspond to the scalar and vector parts of \(q_X\), followed by those of \(d_X\). \cite{daniilidis,opencvsource} The equations \(T_\ell(q_X,d_X)^\top=0\) are stacked into a matrix with eight columns. \cite{daniilidis} In noisy observations, the exact invariant equalities become approximate. \cite{daniilidis}
+\end{equation}
+Its columns correspond to the scalar and vector parts of \(q_X\), followed by those of \(d_X\).  The equations \(T_\ell(q_X,d_X)^\top=0\) are stacked into a matrix with eight columns.  In noisy observations, the exact invariant equalities become approximate.
 
 \subsubsection{The Two-Dimensional Solution Space}
-For generic exact informative data, the linear construction leaves a two-dimensional null space. \cite{daniilidis} An SVD supplies two basis vectors. \cite{daniilidis} With noisy data, the two right singular vectors associated with the smallest singular values provide an approximate version of that space. \cite{daniilidis} Split them into real and dual four-component blocks:
+For generic exact informative data, the linear construction leaves a two-dimensional null space.  An SVD supplies two basis vectors.  With noisy data, the two right singular vectors associated with the smallest singular values provide an approximate version of that space.  Split them into real and dual four-component blocks:
 \[
 h_1=\begin{pmatrix}u_1\\v_1\end{pmatrix},
 \qquad
 h_2=\begin{pmatrix}u_2\\v_2\end{pmatrix}.
-\]\mathsource{daniilidis}
+\]
 A candidate solution is
 \[
 q_X=\lambda_1u_1+\lambda_2u_2,\qquad
 d_X=\lambda_1v_1+\lambda_2v_2.
-\]\mathsource{daniilidis}
-The remaining task is to choose the two coefficients so that Equation~\eqref{eq:dual-constraints} holds. \cite{daniilidis}
+\]
+The remaining task is to choose the two coefficients so that Equation~\eqref{eq:dual-constraints} holds.
 
 The orthogonality constraint expands to
 \[
 \alpha\lambda_1^2+\beta\lambda_1\lambda_2
 +\gamma\lambda_2^2=0,
-\]\mathsource{daniilidis}
+\]
 where
 \[
 \alpha=u_1^\top v_1,\quad
 \beta=u_1^\top v_2+u_2^\top v_1,\quad
 \gamma=u_2^\top v_2.
-\]\mathsource{daniilidis}
-If \(\lambda_2\ne0\), set \(s=\lambda_1/\lambda_2\). \cite{daniilidis} Then
+\]
+If \(\lambda_2\ne0\), set \(s=\lambda_1/\lambda_2\).  Then
 \begin{equation}\label{eq:dual-quadratic}
 \alpha s^2+\beta s+\gamma=0.
-\end{equation}\mathsource{daniilidis}
+\end{equation}
 For an admissible root, unit length is obtained with
 \[
 \lambda_2=\frac{1}{\|su_1+u_2\|},\qquad
 \lambda_1=s\lambda_2.
-\]\mathsource{daniilidis}
-The equivalent overall sign does not change the rigid transformation. \cite{daniilidis} The resulting \(q_X\) gives rotation, and Equation~\eqref{eq:dual-translation} gives translation. \cite{daniilidis}
+\]
+The equivalent overall sign does not change the rigid transformation.  The resulting \(q_X\) gives rotation, and Equation~\eqref{eq:dual-translation} gives translation.
 
-\subsubsection{Numerical Cases That Must Be Recorded}
-The usual quadratic formula assumes \(\alpha\ne0\). \cite{daniilidis,opencvsource} A general treatment must also handle a linear equation, a possible solution with \(\lambda_2=0\), a zero normalising denominator, or a negative discriminant under noisy or degenerate data. \cite{daniilidis,opencvsource} Degenerate motion can leave a larger null space than the two-dimensional space used above. \cite{daniilidis,opencvsource}
+\subsubsection{Degenerate and Numerical Cases}
+The usual quadratic formula assumes \(\alpha\ne0\).  A general treatment must also handle a linear equation, a possible solution with \(\lambda_2=0\), a zero normalising denominator, or a negative discriminant under noisy or degenerate data.  Degenerate motion can leave a larger null space than the two-dimensional space used above.
 
-The inspected OpenCV routine directly evaluates the two quadratic roots and selects a candidate using their normalisation quantities. \cite{opencvsource} These implementation details can affect failures. \cite{daniilidis,opencvsource} The experiment will check for nonfinite entries and invalid rotations, and will retain failure information in the comparison.
+The inspected OpenCV routine directly evaluates the two quadratic roots and selects a candidate using their normalisation quantities.  These implementation details can affect failures.
+% DRAFT NOTE -- Planned solver-failure checks.
+% The experiment will check for nonfinite entries and invalid rotations, and will retain failure information in the comparison.
 
-Selecting a constrained solution within the two-vector subspace is not the same as solving every possible nonlinear geometric error minimisation problem. \cite{daniilidis,opencvsource} The method is simultaneous because its algebra couples rotation and translation; that designation does not guarantee universal robustness. \cite{daniilidis,opencvsource}
+
+Selecting a constrained solution within the two-vector subspace is not the same as solving every possible nonlinear geometric error minimisation problem.  The method is simultaneous because its algebra couples rotation and translation; that designation does not guarantee universal robustness. \cite{daniilidis,opencvsource}
+
 
 \subsection{Comparison of the Mathematical Constructions}
 \begin{table}[H]
@@ -1042,59 +1149,113 @@ Selecting a constrained solution within the two-vector subspace is not the same 
 \toprule
 Method & Rotation representation & Main computation\\
 \midrule
-Tsai--Lenz & Three quaternion parameters & Linear rotation fit, then translation fit \cite{tsai,opencvsource}\\
-Park--Martin & Rotation logarithm vectors & Vector alignment, then translation fit \cite{park,opencvsource}\\
-Horaud--Dornaika & Unit quaternion & Smallest eigenvector, then translation fit \cite{horaud,opencvsource}\\
-Andreff et al. & Nine matrix entries & Joint linear fit and rotation normalisation \cite{andreff,opencvsource}\\
-Daniilidis & Dual quaternion & SVD subspace and physical constraints \cite{daniilidis,opencvsource}\\
+Tsai--Lenz & Three quaternion parameters & Linear rotation fit, then translation fit \cite{tsai}\\
+Park--Martin & Rotation logarithm vectors & Vector alignment, then translation fit \cite{park}\\
+Horaud--Dornaika & Unit quaternion & Smallest eigenvector, then translation fit \cite{horaud}\\
+Andreff et al. & Nine matrix entries & Joint linear fit and rotation normalisation \cite{andreff}\\
+Daniilidis & Dual quaternion & SVD subspace and physical constraints \cite{daniilidis}\\
 \bottomrule
 \end{tabular}
 \caption{Mathematical constructions of the five calibration methods.}
 \label{tab:methods}
 \end{table}
-Exact, sufficiently informative data can make these constructions agree on the same physical transformation. \cite{opencvsource,tsai,park,horaud,andreff,daniilidis} With noise, their algebraic residuals, constraints and numerical procedures differ. \cite{opencvsource} The separable methods also propagate rotational estimation error into the subsequent translation stage. \cite{wenhardtde}
+Exact, sufficiently informative data can make these constructions agree on the same physical transformation.  With noise, their algebraic residuals, constraints and numerical procedures differ.  The separable methods also propagate rotational estimation error into the subsequent translation stage. \cite{wenhardtde,opencvsource}
 
-For a practical comparison, the method name must therefore be accompanied by the software version, data geometry, translation unit, valid output checks and validation criterion. A solver ranking without these conditions would be difficult to interpret.
+
+
+% DRAFT NOTE -- Practical comparison and reporting checklist.
+% For a practical comparison, the method name must therefore be accompanied by the software version, data geometry, translation unit, valid output checks and validation criterion. A solver ranking without these conditions would be difficult to interpret.
+
 
 
 \newpage
 \section{Experimental Protocol}\label{sec:experiment}
-\subsection{Laboratory Setup and Recorded Information}
+
+% DRAFT NOTE -- Empty laboratory-setup placeholder heading.
+% \subsection{Laboratory Setup and Recorded Information}
+
 
 %%%Each observation will retain its image, detected target features, image identifier, robot pose, target-pose estimate, timestamp or acquisition identifier, and quality measures. Rejected observations will retain a documented rejection reason. This record makes it possible to distinguish a hand--eye solver failure from a missing target detection or an upstream pose-estimation failure. \cite{halconde,dfgde}%%%
 
-\subsection{Common Data Processing}
-All five methods will receive the same accepted absolute pose observations, in the same order, with the same coordinate directions and units. Image feature detection, distortion handling and target-pose estimation will use shared settings. A pose-quality rule will be defined before comparing solver outputs.
+\subsection{OpenCV Inputs and Outputs}
 
-Robot poses and camera target poses will be converted into \(4\times4\) transformations. Rotation validity, last-row structure and finite entries will be checked. The frame composition will be verified on constructed data with a known \(X\) before interpreting laboratory results.
+% DRAFT NOTE -- Provisional common-processing procedure.
+% All five methods will receive the same accepted absolute pose observations, in the same order, with the same coordinate directions and units. Image feature detection, distortion handling and target-pose estimation will use shared settings. A pose-quality rule will be defined before comparing solver outputs.
 
-The OpenCV method identifiers have the common prefix \texttt{CALIB\_HAND\_EYE\_} followed by \texttt{TSAI}, \texttt{PARK}, \texttt{HORAUD}, \texttt{ANDREFF}, or \texttt{DANIILIDIS}. The input arrays provide robot and target rotations and translations; in the standard eye-in-hand convention the output is camera-to-gripper. The eye-to-hand case will use the inversion and interpretation derived earlier.
 
-Identical absolute inputs do not imply identical internal pair selection. \cite{opencvsource} Any implementation-specific motion rejection, especially the Tsai selection described in Section~\ref{sec:tsai}, will be included when interpreting effective data use.
+
+% DRAFT NOTE -- Planned preprocessing and verification checklist.
+% Robot poses and camera target poses will be converted into \(4\times4\) transformations. Rotation validity, last-row structure and finite entries will be checked. The frame composition will be verified on constructed data with a known \(X\) before interpreting laboratory results.
+
+
+The OpenCV method identifiers have the common prefix \texttt{CALIB\_HAND\_EYE\_} followed by \texttt{TSAI}, \texttt{PARK}, \texttt{HORAUD}, \texttt{ANDREFF}, or \texttt{DANIILIDIS}. The input arrays provide robot and target rotations and translations; in the standard eye-in-hand convention the output is camera-to-gripper. \cite{opencv}
+% DRAFT NOTE -- Planned API adaptation; the actual frame derivation remains in Section 3.
+% The eye-to-hand case will use the inversion and interpretation derived earlier.
+
+
+Identical absolute inputs do not imply identical internal pair selection. \cite{opencvsource}
+% DRAFT NOTE -- Experimental interpretation reminder.
+% Any implementation-specific motion rejection, especially the Tsai selection described in Section~\ref{sec:tsai}, will be included when interpreting effective data use.
+
 
 \subsection{Synthetic Experiments with a Known Transformation}
-Synthetic data provide an independent reference because the true hand--eye transformation is selected in advance. \cite{robotikde,halconde} For eye-in-hand, choose valid rigid transformations \(X_\star\) and \(Y_\star\), then generate diverse robot poses \(G_k\). \cite{robotikde,halconde} Construct
+Synthetic data provide an independent reference because the true hand--eye transformation is selected in advance.  For eye-in-hand, choose valid rigid transformations \(X_\star\) and \(Y_\star\), then generate diverse robot poses \(G_k\).  Construct
 \[
 C_k=X_\star^{-1}G_k^{-1}Y_\star.
-\]\mathsource{robotikde,halconde}
-The exact relationship \(G_kX_\star C_k=Y_\star\) then holds by construction. \cite{robotikde,halconde}
+\]
+The exact relationship \(G_kX_\star C_k=Y_\star\) then holds by construction.
 
-First, noise-free data will verify transformation directions and the expected recovery under informative motions. Next, controlled perturbations will examine sensitivity. Rotational noise will be applied through a small valid rotation, for example
+
+% DRAFT NOTE -- Provisional noise-study workflow; retain the rotation-preserving perturbation model.
+% First, noise-free data will verify transformation directions and the expected recovery under informative motions. Next, controlled perturbations will examine sensitivity. Rotational noise will be applied through a small valid rotation, for example
+A rotation-preserving perturbation has the form
 \[
 \widetilde R=\exp([\delta r]_\times)R.
-\]\mathsource{robotikde}
-Translation can be perturbed as \(\widetilde t=t+\delta t\). \cite{robotikde} The coordinate frame, distribution, scale and dependence of these perturbations will be stated. Arbitrary independent changes to rotation-matrix entries will be avoided because they generally destroy orthogonality. \cite{robotikde}
+\]
+Translation can be perturbed as \(\widetilde t=t+\delta t\).
+% DRAFT NOTE -- Perturbation-model documentation reminder.
+% The coordinate frame, distribution, scale and dependence of these perturbations will be stated.
 
-Noise levels, repeated random trials, seeds and data geometry will be recorded. These synthetic perturbations test specified models; they do not claim to reproduce every source of laboratory uncertainty. A supplementary image-level simulation could test projection and target-pose estimation if that stage requires closer investigation.
+% DRAFT NOTE -- Implementation recommendation; retain its mathematical reason.
+% Arbitrary independent changes to rotation-matrix entries will be avoided because they generally destroy orthogonality. \cite{robotikde}
+Arbitrary independent changes to rotation-matrix entries generally destroy orthogonality.
+
+
+% DRAFT NOTE -- Synthetic-experiment record checklist.
+% Noise levels, repeated random trials, seeds and data geometry will be recorded.
+ These synthetic perturbations test specified models; they do not claim to reproduce every source of laboratory uncertainty. \cite{robotikde,halconde}
+
+% DRAFT NOTE -- Optional future simulation recommendation.
+% A supplementary image-level simulation could test projection and target-pose estimation if that stage requires closer investigation.
+
 
 \subsection{Pose Count, Diversity and Repeated Acquisition}
-The pose-count study will fit each method on shared subsets of the same acquisition pool. The selected counts and subset repetitions will be fixed before evaluation. Several subsets will be used at a given count so that one favourable selection does not determine the conclusion.
 
-The pose-diversity study will compare subsets with different axis and position distributions while controlling pose count as far as possible. Measures can include relative-angle ranges, axis distribution and singular values of the translation system. \cite{wenhardtde,eauncertainty} The measurements, rather than informal labels alone, will describe how the datasets differ.
+% DRAFT NOTE -- Provisional pose-count experiment design.
+% The pose-count study will fit each method on shared subsets of the same acquisition pool. The selected counts and subset repetitions will be fixed before evaluation. Several subsets will be used at a given count so that one favourable selection does not determine the conclusion.
 
-Repeated independent acquisitions will assess repeatability. Resampling one recorded dataset is useful for subset sensitivity, but is not equivalent to repeating the physical acquisition: it does not reproduce changes in detection, robot positioning or mounting. \cite{eauncertainty,halconde} These two forms of variation will be reported separately.
 
-Relative pairs will be generated only within the selected calibration observations. A pair containing a held-out image must not be used to fit the calibration, because it would introduce validation information into training. \cite{opencvsource,eauncertainty}
+
+% DRAFT NOTE -- Provisional pose-diversity experiment design.
+% The pose-diversity study will compare subsets with different axis and position distributions while controlling pose count as far as possible.
+ Measures can include relative-angle ranges, axis distribution and singular values of the translation system. \cite{wenhardtde}
+% DRAFT NOTE -- Dataset-description reminder.
+% The measurements, rather than informal labels alone, will describe how the datasets differ.
+
+
+
+% DRAFT NOTE -- Provisional repeatability experiment.
+% Repeated independent acquisitions will assess repeatability.
+ Resampling one recorded dataset is useful for subset sensitivity, but is not equivalent to repeating the physical acquisition: it does not reproduce changes in detection, robot positioning or mounting. \cite{halconde}
+% DRAFT NOTE -- Reporting reminder.
+% These two forms of variation will be reported separately.
+
+
+
+% DRAFT NOTE -- Provisional dataset-splitting procedure.
+% Relative pairs will be generated only within the selected calibration observations.
+ A pair containing a held-out image must not be used to fit the calibration, because it would introduce validation information into training. \cite{opencvsource,eauncertainty}
+
 
 \subsection{Rotation and Translation Error Against a Reference}
 When a true or independently measured \(X_\star\) is available, rotation error is
@@ -1105,60 +1266,101 @@ e_R=
 \frac{\operatorname{tr}(\widehat R_XR_\star^\top)-1}{2},
 -1,1
 \right)\right].
-\end{equation}\mathsource{robotikde}
-This is the angle of the rotation that separates the two orientations. \cite{robotikde} Clipping prevents small floating-point deviations from giving an argument outside the domain of \(\arccos\). \cite{robotikde,wernerde} Angles will be reported in degrees, while calculations use radians.
+\end{equation}
+This is the angle of the rotation that separates the two orientations.  Clipping prevents small floating-point deviations from giving an argument outside the domain of \(\arccos\). \cite{wernerde}
+% DRAFT NOTE -- Reporting-unit choice; confirm in the implemented analysis.
+% Angles will be reported in degrees, while calculations use radians.
+
 
 Translation error is
 \begin{equation}\label{eq:translation-error}
 e_t=\|\widehat t_X-t_\star\|.
-\end{equation}\mathsource{buldyhinua,robotikde}
-Both translations must be expressed in the same destination frame and unit. \cite{buldyhinua,robotikde} Rotation and translation will be reported separately. A combined score would require a justified weighting, since degrees and millimetres cannot simply be added. \cite{eauncertainty}
+\end{equation}
+Both translations must be expressed in the same destination frame and unit.
+% DRAFT NOTE -- Reporting reminder.
+% Rotation and translation will be reported separately.
+ A combined score would require a justified weighting, since degrees and millimetres cannot simply be added. \cite{eauncertainty,buldyhinua}
 
-For laboratory accuracy claims, the independent reference and its uncertainty must be documented. \cite{eauncertainty} Robot-controller output alone is not automatically an independent accurate reference for the camera-to-robot transformation. \cite{eauncertainty}
+
+
+
+% DRAFT NOTE -- Reference-measurement documentation reminder.
+% For laboratory accuracy claims, the independent reference and its uncertainty must be documented. \cite{eauncertainty}
+ Robot-controller output alone is not automatically an independent accurate reference for the camera-to-robot transformation. \cite{eauncertainty,robotikde}
+
 
 \subsection{Held-Out Pose Consistency}
 For an eye-in-hand estimate \(\widehat X\), each observation implies a target pose
 \[
 \widehat Y_k=G_k\widehat X C_k.
-\]\mathsource{halconde,robotikde}
-With a correct model and exact observations, all these matrices are equal. \cite{halconde,robotikde} In real data, their variation provides a consistency measure. \cite{halconde,robotikde}
+\]
+With a correct model and exact observations, all these matrices are equal.  In real data, their variation provides a consistency measure.
 
-A fixed reference \(\bar Y\) will be estimated using calibration observations only. \cite{halconde,robotikde} Its translation can be the arithmetic mean of their translations. \cite{eauncertainty} In this thesis, the rotation reference is defined by projecting the sum of their rotation matrices to \(\mathrm{SO}(3)\) using Equation~\eqref{eq:proper-rotation}. \cite{wernerde,bokhonovua} This thesis defines its chordal rotation reference by that projection; other rotation-averaging objectives need not give the same result. \cite{wernerde,bokhonovua}
 
-For a held-out observation, compare \(\widehat Y_k\) with the fixed \(\bar Y\). \cite{halconde,robotikde} The angle of \(\widehat R_{Y_k}\bar R_Y^\top\) and the distance \(\|\widehat t_{Y_k}-\bar t_Y\|\) quantify disagreement. \cite{robotikde,buldyhinua} The reference will not be recomputed using validation observations.
+% DRAFT NOTE -- Retain the reference definition without claiming an implemented estimation step.
+% A fixed reference \(\bar Y\) will be estimated using calibration observations only. \cite{halconde,robotikde}
+Let \(\bar Y\) denote a fixed reference estimated from calibration observations only.  Its translation can be the arithmetic mean of their translations. \cite{eauncertainty} In this thesis, the rotation reference is defined by projecting the sum of their rotation matrices to \(\mathrm{SO}(3)\) using Equation~\eqref{eq:proper-rotation}.  This thesis defines its chordal rotation reference by that projection; other rotation-averaging objectives need not give the same result. \cite{wernerde,bokhonovua}
+
+
+
+For a held-out observation, compare \(\widehat Y_k\) with the fixed \(\bar Y\).  The angle of \(\widehat R_{Y_k}\bar R_Y^\top\) and the distance \(\|\widehat t_{Y_k}-\bar t_Y\|\) quantify disagreement. \cite{buldyhinua}
+% DRAFT NOTE -- Planned validation-reference handling.
+% The reference will not be recomputed using validation observations.
+
 
 For eye-to-hand, use the corresponding constant-pose predictions
 \[
 \widehat Z_k=G_k^{-1}\widehat X C_k.
-\]\mathsource{halconde,robotikde}
-The same procedure evaluates their agreement with a gripper-frame target pose estimated from calibration data. \cite{halconde,robotikde}
+\]
+The same procedure evaluates their agreement with a gripper-frame target pose estimated from calibration data.
 
-These measures test consistency of the complete observation chain. \cite{halconde,robotikde} Systematic errors shared by all observations can remain compatible with a small residual. \cite{eauncertainty,halconde} Consistency must therefore remain distinct from independently verified accuracy. \cite{eauncertainty,halconde}
+These measures test consistency of the complete observation chain.  Systematic errors shared by all observations can remain compatible with a small residual.  Consistency and independently verified accuracy are therefore distinct criteria. \cite{eauncertainty,halconde,robotikde}
+
+
+
 
 \subsection{Relative-Motion Residuals and Image Validation}
-One additional diagnostic compares \(A_\ell\widehat X\) with \(\widehat X B_\ell\). \cite{wenhardtde} For rotation, compare \(R_{A_\ell}\widehat R_X\) and \(\widehat R_XR_{B_\ell}\) using the angle formula. \cite{wenhardtde} For translation, use
+One additional diagnostic compares \(A_\ell\widehat X\) with \(\widehat X B_\ell\).  For rotation, compare \(R_{A_\ell}\widehat R_X\) and \(\widehat R_XR_{B_\ell}\) using the angle formula.  For translation, use
 \[
 r_{t,\ell}
 =(R_{A_\ell}-I_3)\widehat t_X
 -\widehat R_Xt_{B_\ell}+t_{A_\ell}.
-\]\mathsource{wenhardtde}
-Its norm measures the translational mismatch in the motion equation. \cite{wenhardtde} Residuals on fitting pairs are training diagnostics; residuals from held-out observations provide additional evidence. \cite{wenhardtde} Pair-level values must be interpreted with their shared-observation dependence in mind. \cite{opencvsource,eauncertainty}
+\]
+Its norm measures the translational mismatch in the motion equation.  Residuals on fitting pairs are training diagnostics; residuals from held-out observations provide additional evidence.
+% DRAFT NOTE -- State the statistical dependence directly.
+% Pair-level values must be interpreted with their shared-observation dependence in mind.
+Pair-level residuals can be statistically dependent because they share original observations. \cite{opencvsource,eauncertainty}
 
-Where possible, the estimated calibration can also predict target feature projections in held-out images. \cite{wenhardtde,halconde} An image-space reprojection error tests agreement with actual pixel observations. \cite{wenhardtde,halconde} It also depends on the intrinsic model and feature measurements, so it will supplement rather than replace the pose-space evaluation. \cite{wenhardtde,halconde}
-
-\subsection{Failures, Repeatability and Reporting}
-A returned transformation will be checked for finite entries, \(R^\top R\approx I_3\), and \(\det R\approx1\), using documented tolerances. \cite{robotikde} Invalid outputs, exceptions and unavailable estimates will be counted. They will not be silently discarded from performance summaries or repaired within the main comparison.
-
-For repeated estimates, rotational variation will be measured relative to a defined rotation reference, and translational variation relative to a translation reference. Mean, median, spread and failure count will be reported as appropriate, together with the number of acquisitions or trials. Uncertainty summaries based on resampling will resample acquisition-level observations or sessions, rather than pretending that all relative pairs are independent.
-
-The results will present accuracy where a reference exists, held-out consistency, repeatability and failure rate as separate quantities. Solver conclusions will be linked to the relevant pose count, diversity and measurement conditions. Any modified algorithm, such as translation refitting or nonlinear refinement, will be reported as an additional procedure with its own label.
-
-\newpage
-\section{Results and Discussion}
+Where possible, the estimated calibration can also predict target feature projections in held-out images.  An image-space reprojection error tests agreement with actual pixel observations.
+% DRAFT NOTE -- Planned evaluation choice; retain the model dependence.
+% It also depends on the intrinsic model and feature measurements, so it will supplement rather than replace the pose-space evaluation. \cite{wenhardtde,halconde}
+It also depends on the intrinsic model and feature measurements. \cite{halconde,wenhardtde}
 
 
-\newpage
-\section{Conclusion}
+
+
+
+% DRAFT NOTE -- Provisional failure and reporting procedure; complete from the implemented study.
+% \subsection{Failures, Repeatability and Reporting}
+% A returned transformation will be checked for finite entries, \(R^\top R\approx I_3\), and \(\det R\approx1\), using documented tolerances. \cite{robotikde} Invalid outputs, exceptions and unavailable estimates will be counted. They will not be silently discarded from performance summaries or repaired within the main comparison.
+%
+% For repeated estimates, rotational variation will be measured relative to a defined rotation reference, and translational variation relative to a translation reference. Mean, median, spread and failure count will be reported as appropriate, together with the number of acquisitions or trials. Uncertainty summaries based on resampling will resample acquisition-level observations or sessions, rather than pretending that all relative pairs are independent.
+%
+% The results will present accuracy where a reference exists, held-out consistency, repeatability and failure rate as separate quantities. Solver conclusions will be linked to the relevant pose count, diversity and measurement conditions. Any modified algorithm, such as translation refitting or nonlinear refinement, will be reported as an additional procedure with its own label.
+
+
+
+% DRAFT NOTE -- Empty results chapter; enable after results are available.
+% \newpage
+% \section{Results and Discussion}
+
+
+
+
+% DRAFT NOTE -- Empty conclusion chapter; enable after conclusions are written.
+% \newpage
+% \section{Conclusion}
+
 
 
 
@@ -1172,36 +1374,37 @@ The results will present accuracy where a reference exists, held-out consistency
 \toprule
 Symbol & Meaning\\
 \midrule
-\({}^{a}T_b\) & Rigid transformation from coordinates in \(b\) to coordinates in \(a\) \cite{robotikde,buldyhinua}\\
-\(R,t\) & Rotation matrix and translation vector \cite{robotikde,buldyhinua}\\
-\(I_n\) & \(n\times n\) identity matrix \cite{buldyhinua}\\
-\(G_k\) & Gripper-to-base pose at acquisition \(k\) \cite{halconde,wenhardtde}\\
-\(C_k\) & Target-to-camera pose at acquisition \(k\) \cite{halconde,wenhardtde}\\
-\(X\) & Fixed hand--eye transformation being estimated \cite{halconde,wenhardtde}\\
-\(A_\ell,B_\ell\) & Matching relative motions from a pair of acquisitions \cite{halconde,wenhardtde}\\
-\([v]_\times\) & Matrix that computes the cross product with \(v\) \cite{buldyhinua}\\
-\(\widehat X\) & Estimated transformation \cite{eauncertainty}\\
-\(X_\star\) & Known or independently measured reference \cite{eauncertainty}\\
-\(\|v\|\) & Euclidean vector length \cite{buldyhinua}\\
-\(D^\dagger\) & Pseudoinverse used for a least-squares solution \cite{wernerde}\\
-\(\otimes\) & Quaternion product or Kronecker product, distinguished by its operands \cite{bokhonovua,opencvsource}\\
+\({}^{a}T_b\) & Rigid transformation from coordinates in \(b\) to coordinates in \(a\) \\
+\(R,t\) & Rotation matrix and translation vector \\
+\(I_n\) & \(n\times n\) identity matrix \\
+\(G_k\) & Gripper-to-base pose at acquisition \(k\) \\
+\(C_k\) & Target-to-camera pose at acquisition \(k\) \\
+\(X\) & Fixed hand--eye transformation being estimated \\
+\(A_\ell,B_\ell\) & Matching relative motions from a pair of acquisitions \\
+\([v]_\times\) & Matrix that computes the cross product with \(v\) \\
+\(\widehat X\) & Estimated transformation \\
+\(X_\star\) & Known or independently measured reference \\
+\(\|v\|\) & Euclidean vector length \\
+\(D^\dagger\) & Pseudoinverse used for a least-squares solution \\
+\(\otimes\) & Quaternion product or Kronecker product, distinguished by its operands \\
 \bottomrule
 \end{tabular}
 \caption{Overview of the principal notation.}
 \label{tab:notation}
-\end{table}
+\end{table} \cite{robotikde,buldyhinua,halconde,wenhardtde,eauncertainty,wernerde,bokhonovua,opencvsource}
+
 
 \section{Recovering Translation: A Small Linear Example}
-The following numbers are chosen for this thesis to illustrate the cited translation equation and its rank condition. Suppose the right-hand sides of Equation~\eqref{eq:translation-handeye}, after estimating rotation, are known for two robot rotations. \cite{wenhardtde,wernerde} For a \(90^\circ\) rotation about \(z\),
+The following numbers are chosen for this thesis to illustrate the cited translation equation and its rank condition. Suppose the right-hand sides of Equation~\eqref{eq:translation-handeye}, after estimating rotation, are known for two robot rotations.  For a \(90^\circ\) rotation about \(z\),
 \[
 R_z-I_3=
 \begin{pmatrix}-1&-1&0\\1&-1&0\\0&0&0\end{pmatrix}.
-\]\mathsource{wenhardtde,wernerde}
+\]
 If the true \(t_X=(10,20,30)^\top\ \mathrm{mm}\), its right-hand side is
 \[
 (R_z-I_3)t_X=(-30,-10,0)^\top\ \mathrm{mm}.
-\]\mathsource{wenhardtde,wernerde}
-The first two equations give \(-t_x-t_y=-30\) and \(t_x-t_y=-10\), hence \(t_x=10\), \(t_y=20\). \cite{wenhardtde,wernerde} The third equation is \(0=0\), so \(t_z\) is undetermined. \cite{wenhardtde,wernerde}
+\]
+The first two equations give \(-t_x-t_y=-30\) and \(t_x-t_y=-10\), hence \(t_x=10\), \(t_y=20\).  The third equation is \(0=0\), so \(t_z\) is undetermined.
 
 Now add a \(90^\circ\) rotation about \(x\):
 \[
@@ -1209,10 +1412,11 @@ R_x-I_3=
 \begin{pmatrix}0&0&0\\0&-1&-1\\0&1&-1\end{pmatrix},
 \qquad
 (R_x-I_3)t_X=(0,-50,-10)^\top\ \mathrm{mm}.
-\]\mathsource{wenhardtde,wernerde}
-These equations constrain \(t_y,t_z\). \cite{wenhardtde,wernerde} Together, the two motion axes determine all three components. \cite{wenhardtde,wernerde} If the right-hand sides are perturbed by measurement error, the same stacked system is solved by least squares. \cite{wenhardtde,wernerde}
+\]
+These equations constrain \(t_y,t_z\).  Together, the two motion axes determine all three components.  If the right-hand sides are perturbed by measurement error, the same stacked system is solved by least squares.
 
-This example illustrates why changing the axis of motion matters. \cite{wenhardtde,wernerde} Acquiring many rotations about \(z\) can improve the estimates of the constrained components, but cannot reveal the missing component along \(z\). \cite{wenhardtde,wernerde}
+This example illustrates why changing the axis of motion matters.  Acquiring many rotations about \(z\) can improve the estimates of the constrained components, but cannot reveal the missing component along \(z\). \cite{wenhardtde,wernerde}
+
 
 
 % Source: 08_bibliography.tex

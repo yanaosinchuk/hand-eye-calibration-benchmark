@@ -83,7 +83,7 @@ Finite solver outputs will be checked for valid rigid transformations. Numerical
 
 The thesis bibliography also includes the original papers for the other compared methods, the inspected OpenCV source and David Marr’s *Vision*. German robotics and numerical-algebra texts and two Ukrainian textbooks support the mathematical foundations. See the [citation map](docs/citation-map.md) for the passages used and for the distinction between source relations and calculations constructed in this thesis.
 
-The thesis uses plain numbered citations for factual statements and displayed equations. Worked examples identify their values as author-chosen and cite the underlying mathematical relations. Research plans, personal acknowledgments and notation choices are identified as statements by the author.
+The thesis uses plain numbered citations. A subsection that mainly draws on the same source cites it once in its closing paragraph; references for distinct material and direct quotations remain beside the relevant discussion. Worked examples cite their underlying mathematical relations. Draft-only instructions, provisional experiment plans and empty chapter headings are preserved as LaTeX comments and do not appear in the PDF.
 
 [1] Stefan Wenhardt, *Ansichtenauswahl für die 3-D-Rekonstruktion statischer Szenen* (2013), Section 2.3: [German dissertation](https://www5.cs.fau.de/fileadmin/research/Publikationen/2013/Wenhardt13-AFD.pdf).
 

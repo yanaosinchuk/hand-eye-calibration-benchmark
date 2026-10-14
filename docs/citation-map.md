@@ -2,7 +2,7 @@
 
 The manuscript uses `biblatex` with the `numeric` style. Printed numbers are generated from first citation order; the stable identifiers below are the keys in `paper/references.bib`. The source numbers in the thesis have no chapter or page suffixes.
 
-This map records the passages used to check the background and the provenance of the displayed mathematics. It accompanies the sentence-level citations in the manuscript.
+This map records the passages used to check the background and the provenance of the displayed mathematics. Repeated references to a subsection's main source are consolidated into one citation in its closing paragraph. Distinct secondary-source material and direct quotations retain local attributions where needed.
 
 ## German and Ukrainian background
 
@@ -17,7 +17,7 @@ Page numbers in this table refer to the page numbers printed in the source, rath
 | `wenhardtde` | Stefan Wenhardt, *Ansichtenauswahl für die 3-D-Rekonstruktion statischer Szenen*, doctoral dissertation, Erlangen, 2013; German | Sections 2.1–2.2: projection and camera calibration; Section 2.3, pp. 27–31, especially Eqs. (2.31)–(2.44): rigid hand–eye relationship, relative-motion equation, rotation/translation split and nonparallel-axis observability. [PDF](https://www5.cs.fau.de/fileadmin/research/Publikationen/2013/Wenhardt13-AFD.pdf) |
 | `halconde` | MVTec Software GmbH, HALCON 24.11 operator reference, *Hand-Auge-Kalibrierung*; German | “Bewegte Kamera”, “Stationäre Kamera” and acquisition guidance: fixed mounting relationships, robot and target poses, coordinate chains, intrinsic calibration and correspondence of image and robot observations. This source supports geometric and acquisition background; OpenCV behaviour is checked in OpenCV's own documentation and code. [Reference](https://www.mvtec.com/doc/halcon/2411/de/hand_eye_calibration.html) |
 | `eauncertainty` | European co-operation for Accreditation, *Ermittlung der Messunsicherheit bei Kalibrierungen*, EA-4/02 M: 2022, DAkkS German translation dated 31 August 2022 | Sections 2–4: measurement model, input uncertainty, repeated observations, mean and propagation; Appendix D: correlated input quantities and shared uncertainty contributions. The thesis specifies its own accuracy, consistency and repeatability metrics using this measurement background. [PDF](https://www.dakks.de/files/Dokumentensuche/Dateien/EA-4-02%20M%202022_%C3%9Cbersetzung_Deutsche%20%C3%9Cbersetzung.pdf) |
-| `dfgde` | Deutsche Forschungsgemeinschaft, *Leitlinien zur Sicherung guter wissenschaftlicher Praxis: Kodex*, corrected version 1.2, September 2024; German | Guidelines 11 and 12: documented methods, reproducibility and retention of results, including results that do not support a hypothesis. Used for the documentation and reporting rationale. [Publisher-linked record](https://zenodo.org/records/14281892) |
+| `dfgde` | Deutsche Forschungsgemeinschaft, *Leitlinien zur Sicherung guter wissenschaftlicher Praxis: Kodex*, corrected version 1.2, September 2024; German | Guidelines 11 and 12: documented methods, reproducibility and retention of results, including results that do not support a hypothesis. Retained in the commented documentation and reporting notes. [Publisher-linked record](https://zenodo.org/records/14281892) |
 
 The entries are identified as textbooks, lecture manuscripts, a dissertation or technical guidance according to the source itself.
 
@@ -41,11 +41,11 @@ The numerical coordinate example, scalar least-squares example, diagonal eigenpr
 
 Intermediate algebra is adapted to this thesis's notation and transformation directions. The eye-to-hand rearrangement is obtained from the fixed-pose coordinate chain. The determinant correction for a proper SVD rotation is derived in Section 4.3 from orthogonality and spectral properties, and the nearest-rotation interpretation is checked by expanding the Frobenius norm. Synthetic data and evaluation metrics are constructed from the cited geometric relations.
 
-The proposed experimental choices, research question, document structure, personal acknowledgments and declaration are statements by the author. Sources cited alongside experimental choices support their mathematical or measurement rationale. Results and conclusions await the experiments.
+The research question, document structure, personal acknowledgments and declaration are statements by the author. Provisional acquisition procedures, experiment checklists and reporting instructions are preserved in LaTeX comments. Empty laboratory-setup, results and conclusion headings are also commented out until substantive text is available. The PDF retains the theoretical material, mathematical examples and evaluation definitions. Sources used only in comments remain in the bibliography database but are not printed unless cited in visible text.
 
 ## Displayed mathematics inventory
 
-Every displayed equation block in the current manuscript has an adjacent `\mathsource{...}` citation. A block with multiple lines uses the listed sources for the complete derivation. Inline mathematical assertions are sourced in their surrounding sentences; technical table rows also carry citations.
+The following inventory records the mathematical provenance of all 104 displayed equation blocks. Each block is covered by its subsection's concluding citation or by a local reference in a discussion that draws on different sources. The source keys below identify the underlying relations; they do not imply a separate printed citation after every equation. The notation table has one consolidated source group, while the method-comparison table retains the individual paper references in its rows.
 
 | Block | Subsection | Equation label or first expression | Source keys | Provenance |
 | --- | --- | --- | --- | --- |

@@ -3,7 +3,7 @@
 Bachelor’s thesis project in Applied Mathematics at Hochschule Darmstadt.
 An experimental comparison of OpenCV hand-eye calibration methods using synthetic data and laboratory robot measurements.
 
-**Status: work in progress.** This initial version contains the theoretical thesis draft. The Python benchmark, synthetic experiments and laboratory evaluation are planned; measured comparison results are not yet available.
+**Status: work in progress.** The repository contains the theoretical thesis draft and a runnable synthetic eye-to-hand benchmark. Laboratory validation covers the June and July checkerboard series.
 
 ## Research question
 
@@ -20,7 +20,7 @@ The project will investigate how five calibration methods differ in accuracy, va
 
 ## Methods to compare
 
-The planned benchmark will use the five methods provided by OpenCV’s `calibrateHandEye` interface [2]:
+The benchmark uses the five methods provided by OpenCV’s `calibrateHandEye` interface [2]:
 
 - Tsai–Lenz
 - Park–Martin
@@ -28,7 +28,7 @@ The planned benchmark will use the five methods provided by OpenCV’s `calibrat
 - Andreff–Horaud–Espiau
 - Daniilidis
 
-All methods will receive the same observations and preprocessing. Rotation and translation errors will be reported separately.
+All methods receive the same observations and preprocessing. Rotation and translation errors are reported separately.
 
 ## Repository contents
 
@@ -36,12 +36,35 @@ All methods will receive the same observations and preprocessing. Rotation and t
 | --- | --- |
 | `README.md` | Project scope, current status and next steps |
 | `.gitignore` | Exclusions for Python caches, LaTeX build products and temporary outputs |
+| `benchmark.py` | Synthetic eye-to-hand simulation and Monte Carlo evaluation |
+| `requirements.txt` | Pinned dependencies for reproducing the simulation |
 | `paper/main.tex` | Complete LaTeX thesis draft, including mathematical derivations and the proposed experimental protocol |
 | `paper/references.bib` | Bibliography for the thesis |
 | `docs/citation-map.md` | Source locations and provenance of the displayed formulas and worked examples |
 | `paper/Logo-Hochschule-Darmstadt.png` | University logo used by the title page |
 
-Python modules, experiment scripts and datasets will be added as they are implemented.
+## Run the synthetic benchmark
+
+Use Python 3.12. All five methods receive the same observations in every trial.
+
+```bash
+python -m pip install -r requirements.txt
+python benchmark.py --model poses --trials 100 --seed 42 --output outputs/poses
+python benchmark.py --model pixels --trials 100 --seed 42 --output outputs/pixels
+```
+
+The camera is fixed relative to the robot base. A 7 × 5 grid of inner corners with 20 mm spacing is fixed relative to the gripper. With the convention that a transform maps from its subscript frame into its superscript frame, write `G = base_T_gripper`, `X = gripper_T_target`, `Y = base_T_camera`, and `C = camera_T_target`. The simulator constructs poses satisfying `G @ X = Y @ C`. OpenCV receives `inverse(G)` and `C`; the returned estimate is `Y` for this eye-to-hand arrangement [2].
+
+| Factor | Values |
+| --- | --- |
+| Acquisition poses | 8, 16, 32 |
+| Orientation profile | Isotropic rotation-vector standard deviation of 22° (diverse) or 4° (narrow), or per-axis standard deviations of 0.5°, 0.5°, and 22° (nearly single-axis) |
+| Pose noise (standard deviations per component) | Exact, low (0.1° and 0.5 mm), high (0.5° and 2 mm) |
+| Pixel noise (standard deviation per coordinate) | Exact, low (0.25 px), high (1 px) |
+
+The `poses` model independently perturbs robot and camera-side target poses. The `pixels` model perturbs robot poses and projects the target through a fixed pinhole camera, adds pixel noise, and recovers camera-side poses with `solvePnP`. Distortion, uncertainty in intrinsics, and physical robot reachability are outside this simulation. Each trial uses the same seeded random draws across conditions, and shorter pose sets are prefixes of longer ones.
+
+`trials.csv` contains the angular error and Euclidean translation error against the known camera pose, plus solver status. `summary.csv` reports medians and 95th percentiles for valid estimates and counts failed estimates. A fallback identity transform counts as a failure because the simulated true transform is nonidentity. A valid transform can still have a large error, so compare both error distributions and failure counts. Nominal pixel-mode trials still perform numerical PnP, even with exactly zero pixel noise.
 
 ## Build the thesis
 
@@ -93,3 +116,17 @@ The thesis uses plain numbered citations. A subsection that mainly draws on the 
 
 Yana Osinchuk — B.Sc. Applied Mathematics, Hochschule Darmstadt.
 
+
+## Professor's DENSO data
+
+Run the paired trajectory simulation and leave-one-pose-out image validation with the original archive.
+
+```bash
+python laboratory.py Data4Osinchuk.zip --output outputs/thesis --trials 100 --seed 42
+```
+
+See `EXPERIMENT.md` for the dataset audit, scoring rules and run results.
+
+The published summaries and comparison figure are in [results](results/). Running the commands above regenerates the trial-level CSV files. The laboratory command uses the separately supplied archive. The synthetic benchmark runs without it.
+
+Run `python circle_diagnostic.py Data4Osinchuk.zip` to compare pose-ID pairing and row-order pairing for the July circular target. On nine detected grids, the median relative rotation discrepancy was 0.077° with pose-ID pairing and 13.989° with row-order pairing. This diagnostic tests rotation consistency only. The physical circle spacing and full circular-target hand–eye transform were not validated.

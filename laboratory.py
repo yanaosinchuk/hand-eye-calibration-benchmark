@@ -1,4 +1,3 @@
-"""Replay the DENSO trajectory and cross-validate the July 3 eye-to-hand series."""
 import argparse
 import io
 import xml.etree.ElementTree as ET

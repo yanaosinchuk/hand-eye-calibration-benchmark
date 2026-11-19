@@ -52,7 +52,7 @@ Daniilidis gave the lowest median image prediction error in both series. Park an
 
 ## Manuscript and regenerated outputs
 
-The compiled manuscript is `paper/main.pdf`; its source is `paper/main.tex`. It now contains the five-method theory only, both controlled models, the recorded-trajectory replay, laboratory preprocessing/validation, the circular diagnostic, all completed result types and their limitations. The appendices print all 270 controlled condition summaries and all 60 replay summaries.
+The compiled manuscript is `paper/main.pdf`; its source is `paper/main.tex`. It preserves the introduction and initial thesis formatting, uses the five methods as its theoretical framework, starts each main chapter on a new page, and contains both controlled models, the recorded-trajectory replay, laboratory preprocessing/validation, the circular diagnostic, all completed result types and their limitations. The appendices print all 270 controlled condition summaries and all 60 replay summaries.
 
 Run `python scripts/build_paper_results.py` after installing `requirements-paper.txt` to rebuild the LaTeX tables and paper figures from the committed records. This also rebuilds `real_summary.csv` from `held_out.csv` and `june_held_out.csv`. The fitted nominal geometry is recorded without rounding in `geometry_metadata.json`. This formatting command does not rerun calibration.
 

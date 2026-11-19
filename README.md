@@ -3,7 +3,7 @@
 Bachelor's thesis project in Applied Mathematics at Hochschule Darmstadt.
 A comparison of the five OpenCV hand-eye implementations using controlled synthetic data, recorded DENSO robot motions and held-out laboratory images.
 
-The manuscript now contains a concise account of the five methods, the implemented simulations, data processing, all completed experiment types, numerical results, limitations and conclusions. General coordinate-algebra tutorials have been removed. Full condition summaries are printed in the appendices.
+The manuscript preserves the original thesis structure and formatting: the introduction covers motivation, the research question, scope and a reading guide; the five OpenCV methods form a focused theoretical framework; simulation, laboratory processing, results and conclusions follow. Every main chapter and appendix starts on a new page. General coordinate-algebra tutorials have been removed, and full condition summaries are printed in the appendices.
 
 - [Compiled thesis](paper/main.pdf)
 - [LaTeX source](paper/main.tex)

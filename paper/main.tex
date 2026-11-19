@@ -3,7 +3,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman,english]{babel}
 \usepackage{lmodern,microtype}
-\usepackage[margin=25mm]{geometry}
+\usepackage{csquotes}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs,array,longtable}
 \usepackage{graphicx}
@@ -11,7 +11,7 @@
 \usepackage[hidelinks]{hyperref}
 \graphicspath{{figures/}}
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{0.55em}
+\setlength{\parskip}{0.8em}
 \setlength{\emergencystretch}{3em}
 \renewcommand{\topfraction}{0.9}
 \renewcommand{\textfraction}{0.05}
@@ -29,7 +29,7 @@
 \begin{titlepage}
 \centering
 \begin{flushright}
-\includegraphics[width=0.48\linewidth]{Logo-Hochschule-Darmstadt.png}
+\includegraphics[width=0.5\linewidth]{Logo-Hochschule-Darmstadt.png}
 \end{flushright}
 \vspace{1.5cm}
 {\large\bfseries Bachelor's Thesis\\Bachelor's program in Applied Mathematics\par}
@@ -76,21 +76,45 @@ Bei 20 Posen und geringem Rauschen erreicht Daniilidis in der Trajektoriensimula
 \clearpage
 \section*{Preface}
 \addcontentsline{toc}{section}{Preface}
-I would like to thank Prof. Dr. Thomas Maerz from the bottom of my heart for everything he has done for me. Throughout my studies, he has given his time, advice, and encouragement so generously. His continued willingness to help has meant more than I can fully express here.
+I would like to thank Prof. Dr. Thomas Maerz from the bottom of my heart for everything he has done for me. Throughout my studies, he has given his time, advice, and encouragement so generously. His continued willingness to help has meant more to me than I can fully express here.
 
 I am especially grateful for his help in finding my internship at the Hessian Agency for Nature Conservation, Environment and Geology (HLNUG), and for arranging an opportunity for me to work in the robotics laboratory. He also spoke with another professor to obtain the necessary permission for my work there. Each of these steps required his time and effort, and each made a real difference to my education and the opportunities available to me.
 
-What I appreciate most is the kindness and care behind his support. He has taken my questions seriously, and made the effort to find solutions whenever difficulties arose. Knowing that I could turn to him has given me confidence to pursue new challenges and develop my own ideas. I am deeply grateful for his trust, encouragement, and the opportunities he has helped make possible.
+What I appreciate most is the kindness and care behind his support. He has taken my questions seriously, and made the effort to find solutions whenever difficulties arose. Knowing that I could turn to him has given me confidence to pursue new challenges and develop my own ideas. I am deeply grateful for his trust in me, for his encouragement, and for the many opportunities he has helped make possible.
 
 \clearpage
-\begingroup
-\setlength{\parskip}{0pt}
-\small\tableofcontents
-\endgroup
+\tableofcontents
 \clearpage
 \pagenumbering{arabic}
 
-\section{The Five OpenCV Hand--Eye Methods}\label{sec:methods}
+\clearpage
+\section{Introduction}\label{sec:introduction}
+\subsection{Motivation}
+The guiding analogy of this thesis is that hearing is not the same as listening, just as capturing an image is not the same as understanding what it shows. In \emph{Vision}, David Marr describes seeing as \enquote{to know what is where by looking}. \cite{marr2010} For a robot, the question of where an object is has a practical consequence: its location must be expressed in coordinates that the robot can use to plan and execute a movement. This requires a geometric connection between the camera's observations and the robot's description of space.
+
+A robot and a camera describe the same physical world using different coordinate systems. The robot controller reports the position and orientation of the end effector relative to the robot base. A camera observes image features and, when a target of known geometry is visible, can estimate the target's position and orientation relative to the camera. Hand--eye calibration connects these descriptions. In the eye-to-hand arrangement investigated here, the camera is fixed relative to the base and the target is attached to the robot's tool frame. The classical equation $AX=XB$ expresses compatible relative motions and an unknown fixed transformation. \cite{tsai,halconde,wenhardtde}
+
+The practical difficulty is that the observations are imperfect. Image measurements, camera calibration, robot pose uncertainty and the distribution of acquisition poses affect the estimated relationship. The selected solvers use different algebraic representations and numerical procedures. Comparing their behaviour therefore requires shared observations, a clear experimental protocol and evaluation criteria that distinguish known-reference error from prediction consistency. \cite{eauncertainty,opencvsource}
+
+\subsection{Objective and Research Question}
+This thesis compares the five methods provided by OpenCV's hand--eye calibration interface: Tsai--Lenz, Park--Martin, Horaud--Dornaika, Andreff--Horaud--Espiau and Daniilidis. The laboratory robot-camera installation provides the practical setting. The central research question is:
+\begin{quote}
+How do the five OpenCV hand--eye calibration methods differ in validation performance and repeatability for the laboratory installation, and how do the number and diversity of calibration poses affect these differences?
+\end{quote}
+The evaluated objects are the particular implementations in OpenCV 4.12.0. Their mathematical formulations form the theoretical framework in Section~\ref{sec:methods}. \cite{opencv,opencvsource}
+
+The completed work addresses the question using controlled pose and pixel simulations, a simulation on recorded DENSO motions, and leave-one-pose-out prediction of laboratory images. Repeated numerical trials and shared subsets quantify sensitivity to the selected perturbations and observations. Independent repeated physical acquisitions were not performed, so physical repeatability is not established by these results. \cite{experimentcode,eauncertainty}
+
+\subsection{Scope and Contribution}
+The contribution is a reproducible comparison that links a focused account of the five solver formulations to their implemented observation models and experimental results. All methods receive the same observations within each trial. Camera intrinsic calibration and image-based target-pose estimation are treated as documented upstream stages of the laboratory prediction chain. \cite{experimentcode,halconde}
+
+Accuracy is assessed through agreement with a known or independently measured reference. Consistency describes agreement with additional observations. Repeatability concerns variation under specified repeated-acquisition conditions. Synthetic data provide a known numerical reference; the available laboratory archive supports held-out consistency evaluation but contains no independently surveyed camera pose. No solver is assumed to be universally superior. \cite{eauncertainty,experimentcode}
+
+\subsection{Structure and Reading Guide}
+Section~\ref{sec:methods} provides the theoretical framework for the five methods. Sections~\ref{sec:simulation} and~\ref{sec:laboratory} describe the synthetic models, laboratory processing and validation. Section~\ref{sec:results} presents the results, followed by the conclusions in Section~\ref{sec:conclusion}. The appendices contain the implementation inventory, complete numerical summaries, data corrections and reproduction commands.
+
+\clearpage
+\section{Theoretical Framework}\label{sec:methods}
 The study asks how the five OpenCV implementations differ under shared observations, controlled perturbations and held-out image prediction. The theoretical scope is limited to these methods. Their common algebraic problem is
 \begin{equation}\label{eq:axxb}
 A_\ell X=XB_\ell,
@@ -146,6 +170,7 @@ q^\top q=1,\quad q^\top d=0.
 \end{equation}
 The equation $Q_A\otimes Q_X=Q_X\otimes Q_B$ supplies coupled linear constraints. OpenCV constructs a six-row block per motion pair, extracts the two smallest right singular vectors and selects a combination satisfying the dual-quaternion constraints through a quadratic equation. Rotation and translation are recovered together. Degenerate motion, normalisation denominators and quadratic-root calculations can affect numerical behaviour. A finite proper transform can still be very inaccurate, so validity checks and error distributions are reported separately. \cite{daniilidis,opencvsource}
 
+\clearpage
 \section{Simulation Design and Implementation}\label{sec:simulation}
 \subsection{Implemented scope and coordinate convention}
 The numerical simulation models a stationary camera and a target rigidly attached to the robot's tool centre point (TCP). It represents poses, target feature coordinates and image projections; it does not model motors, joint limits, collision avoidance, robot reachability, image rasterisation or the success of detecting a rendered pattern. In the pixel model, the synthetic observations are already identified image-feature coordinates. These are explicit implementation choices in \code{benchmark.py} and \code{laboratory.py}. \cite{experimentcode}
@@ -218,6 +243,7 @@ e_t&=\|\widehat t-t_\star\|_2.\label{eq:translation-error}
 \end{align}
 The angle and translation error are reported separately in degrees and millimetres. Summaries contain the median and 95th percentile of valid estimates and the number of rejected outputs. Large finite errors remain in the distributions. A low median with a large tail or many rejected outputs is therefore interpreted cautiously. The metrics and aggregation are defined by the experiment code; agreement with an independent reference is distinguished from internal consistency. \cite{experimentcode,eauncertainty}
 
+\clearpage
 \section{Laboratory Processing and Trajectory Replay}\label{sec:laboratory}
 \subsection{Archive, hardware records and data audit}
 The supplied \code{Data4Osinchuk.zip} contains June and July 2024 acquisitions, robot pose tables, acquisition journals, a MATLAB orientation-conversion example and robot project files. The present paired-image analysis uses the 21 June checkerboard series and the 3 July OpenCV checkerboard series. The second June folder duplicates the images and pose table. The 9 July journal describes another setup but supplies no corresponding image series in this archive. \cite{laboratoryarchive}
@@ -278,6 +304,7 @@ where $\theta$ is the principal rotation angle. Compatible rigid-frame motion ha
 
 The diagnostic compares pose-identifier pairing with a naive row-order baseline. The current baseline takes the first nine robot rows after image detection, so it mixes initial correspondence errors with the effect of skipped images. A separate audit also formed row-order pairs before discarding failed detections. Both baselines are reported explicitly in Section~\ref{sec:circle-results}; neither is presented as a reconstruction of an undocumented original acquisition program. \cite{experimentcode}
 
+\clearpage
 \section{Results and Discussion}\label{sec:results}
 \subsection{Controlled synthetic experiments}
 Both generic models were rerun with seed 42 and 100 trials. Their 135 summary rows each matched the recorded CSV values exactly in the stated environment. Noise-free diverse pose-model data recover the known transform to numerical precision. Exact pixel-model runs have small nonzero errors because they include numerical PnP. Low-noise and high-noise conditions quantify sensitivity to the stated perturbations; the two observation models do not impose identical camera-side pose uncertainty. Complete medians, 95th percentiles and failure counts for every condition are in Appendix~\ref{app:controlled}. \cite{experimentcode}
@@ -288,7 +315,7 @@ The Tsai failures are concentrated in the narrow profile and are consistent with
 
 \begin{figure}[!htbp]\centering
 \includegraphics[width=\linewidth]{controlled_sensitivity.pdf}
-\caption{Median translation error for the high-noise controlled experiments. Both rows use logarithmic vertical axes. Pose counts are 8, 16 and 32; each point summarises 100 attempts with errors aggregated over valid estimates.}
+\caption{Median translation error for the high-noise controlled experiments. All panels use logarithmic vertical axes; columns distinguish the pose and pixel models, and rows distinguish orientation profiles. Pose counts are 8, 16 and 32; each point summarises 100 attempts with errors aggregated over valid estimates.}
 \label{fig:controlled}
 \end{figure}
 
@@ -305,7 +332,7 @@ All 60 replay summary rows were reproduced exactly. Table~\ref{tab:replay-low} g
 
 \begin{figure}[!htbp]\centering
 \includegraphics[width=\linewidth]{comparison.pdf}
-\caption{Left and centre: low-noise trajectory-replay medians versus acquisition count. Right: median held-out pixel RMSE for the June and July series. The image-validation scores and synthetic pose errors have different reference meanings.}
+\caption{Top and middle: low-noise trajectory-replay medians versus acquisition count. Bottom: median held-out pixel RMSE for the June and July series. The image-validation scores and synthetic pose errors have different reference meanings.}
 \label{fig:comparison}
 \end{figure}
 
@@ -328,7 +355,8 @@ The reproduced record comprises 27,000 controlled synthetic attempts, 6,000 traj
 
 The repository records source code, pinned numerical dependencies, condition summaries, per-view held-out scores, inferred June corrections and the nominal replay geometry. \code{scripts/build_paper_results.py} rebuilds the printed tables and figures from those recorded outputs; it does not rerun calibration. Trial-level synthetic files are regenerated by the documented commands. Full image processing requires the separately supplied archive. Known limitations include absent robot reachability checks, unmodelled detector failures in synthetic data, unconfirmed physical pixel pitch, the unfinished row-order diagnostic handling and missing per-fold failure recording in real validation. There is no automated regression-test suite or CI workflow for the numerical pipeline in this revision. \cite{experimentcode}
 
-\section{Conclusion}
+\clearpage
+\section{Conclusion}\label{sec:conclusion}
 The completed study compares the five OpenCV methods through two controlled observation models, a recorded-trajectory simulation and held-out laboratory image prediction. The theoretical account is restricted to the evaluated solver formulations. The implementation uses consistent eye-to-hand frame directions and separates known-reference simulation errors from real-image prediction consistency. \cite{experimentcode,opencv}
 
 Daniilidis gives the smallest median translation error in the reported 20-pose low-noise replay and the smallest median held-out pixel RMSE in both laboratory series. Park and Horaud give similar behaviour in several controlled and July validation conditions. These findings depend on the tested data and metric: the nearly single-axis experiments expose large finite errors and heavy tails, and narrow rotations can trigger OpenCV's internal Tsai rejection. Reporting distributions and failures is consequently essential to interpreting the comparison. \cite{experimentcode,opencvsource}
@@ -337,6 +365,7 @@ The circular-target rotation check supports pose-ID correspondence among the det
 
 \clearpage
 \appendix
+\clearpage
 \section{Implementation Inventory}\label{app:functions}
 The inventory describes the source revision used for the recorded runs. Public helper functions and command-line entry points are included so that the computational sequence can be traced without adding general matrix-algebra exposition. \cite{experimentcode}
 \small
@@ -376,6 +405,7 @@ Command-line entries & Read the archive path and, for laboratory processing, tri
 \end{longtable}
 \normalsize
 
+\clearpage
 \section{Complete Controlled Synthetic Summaries}\label{app:controlled}
 Each row represents 100 attempts. Angular errors are in degrees and translation errors in mm. Medians and 95th percentiles include valid estimates only; failed outputs are counted separately. The tables reproduce \code{results/poses/summary.csv} and \code{results/pixels/summary.csv}, rounded to four significant digits for printing. \cite{experimentcode}
 \input{generated/controlled_all.tex}
@@ -386,14 +416,15 @@ These are the 60 rows in \code{results/thesis/summary.csv}, rounded for printing
 \input{generated/replay_all.tex}
 
 \clearpage
-\section{Data Corrections and Reproduction Commands}\label{app:reproduction}
+\section{Data Corrections and Reproduction}\label{app:reproduction}
 \input{generated/june_corrections.tex}
 The correction table preserves the inferred data edits used in every June fold. The journal, original table and duplicate-image issue are described in Section~\ref{sec:laboratory}. \cite{laboratoryarchive,experimentcode}
 
-The full-data July fit defines the following nominal replay transforms, rounded to six decimal places. $Y_\star$ maps camera to base and $M_\star$ maps target to TCP; their translation columns use millimetres. Unrounded entries are preserved in the geometry metadata. These fitted values define the synthetic replay reference, rather than an independent physical reference. \cite{experimentcode}
+The nominal replay transforms $Y_\star$ (camera to base) and $M_\star$ (target to TCP) are printed to six decimal places, with translations in millimetres. They define the synthetic reference; unrounded entries are in the geometry metadata. \cite{experimentcode}
 \input{generated/nominal_geometry.tex}
 
-The following commands start from the repository root and use the defaults of 100 trials and seed 42. Calibration uses Python 3.12 and \code{requirements.txt}; plotting also uses \code{requirements-paper.txt}. The committed generated tables and figures permit a standalone LaTeX build. The image archive is required only for rerunning laboratory processing. \cite{experimentcode}
+From the repository root, these commands use 100 trials and seed 42. The image archive is needed for the laboratory rerun; the committed tables and figures permit a standalone LaTeX build. \cite{experimentcode}
+\begingroup\footnotesize
 \begin{verbatim}
 python -m pip install -r requirements.txt -r requirements-paper.txt
 python benchmark.py --model poses --output outputs/poses
@@ -404,13 +435,11 @@ python scripts/build_paper_results.py
 cd paper
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 \end{verbatim}
+\endgroup
 
 \clearpage
 \phantomsection
 \addcontentsline{toc}{section}{References}
-\begingroup\small
-\setlength{\bibsep}{3pt}
 \bibliographystyle{unsrtnat}
 \bibliography{references}
-\endgroup
 \end{document}

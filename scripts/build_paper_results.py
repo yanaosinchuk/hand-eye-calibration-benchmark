@@ -42,7 +42,7 @@ def number(value):
 def write_table(name, caption, label, headers, rows, alignment, long=False):
     width = " & ".join(headers) + r" \\"
     if long:
-        lines = [r"\begingroup\small\setlength{\tabcolsep}{4pt}",
+        lines = [r"\begingroup\footnotesize\setlength{\tabcolsep}{2pt}",
                  rf"\begin{{longtable}}{{{alignment}}}",
                  rf"\caption{{{caption}}}\label{{{label}}}\\",
                  r"\toprule", width, r"\midrule", r"\endfirsthead",
@@ -53,7 +53,7 @@ def write_table(name, caption, label, headers, rows, alignment, long=False):
         lines += [" & ".join(row) + r" \\" for row in rows]
         lines += [r"\end{longtable}", r"\endgroup"]
     else:
-        lines = [r"\begin{table}[!htbp]\centering\small",
+        lines = [r"\begin{table}[!htbp]\centering\footnotesize\setlength{\tabcolsep}{4pt}",
                  rf"\caption{{{caption}}}\label{{{label}}}",
                  rf"\begin{{tabular}}{{{alignment}}}", r"\toprule", width, r"\midrule"]
         lines += [" & ".join(row) + r" \\" for row in rows]
@@ -155,11 +155,11 @@ def main():
                         r' \\ '.join(rows) + r'\end{pmatrix}.\]')
     (GENERATED/'nominal_geometry.tex').write_text('\n'.join(matrices)+'\n', encoding='utf-8')
 
-    plt.rcParams.update({'font.size': 9, 'axes.spines.top': False, 'axes.spines.right': False})
-    fig, axes = plt.subplots(2, 3, figsize=(10.2, 6), sharex=True, layout='constrained')
-    for i, mode in enumerate(('poses', 'pixels')):
-        for j, profile in enumerate(PROFILES):
-            ax = axes[i, j]
+    plt.rcParams.update({'font.size': 10, 'axes.spines.top': False, 'axes.spines.right': False})
+    fig, axes = plt.subplots(3, 2, figsize=(7.3, 8.3), sharex=True, layout='constrained')
+    for j, profile in enumerate(PROFILES):
+        for i, mode in enumerate(('poses', 'pixels')):
+            ax = axes[j, i]
             for method in METHODS:
                 rows = sorted((r for r in controlled[mode] if r['noise'] == 'high'
                                and r['profile'] == profile and r['method'] == method),
@@ -169,16 +169,16 @@ def main():
             ax.set_yscale('log')
             ax.set_xticks([8, 16, 32])
             ax.grid(True, alpha=.2)
-            if i == 0: ax.set_title(profile.replace('_', ' '))
-            if j == 0: ax.set_ylabel(f'{mode}: median error (mm)')
-            if i == 1: ax.set_xlabel('Acquisition poses')
+            if j == 0: ax.set_title(f'{mode} observation model')
+            ax.set_ylabel(profile.replace('_', ' ') + '\nMedian error (mm)')
+            if j == 2: ax.set_xlabel('Acquisition poses')
     handles, labels = axes[0, 0].get_legend_handles_labels()
     fig.legend(handles, labels, loc='outside lower center', ncol=5, frameon=False)
     fig.savefig(FIGURES/'controlled_sensitivity.pdf')
     fig.savefig(FIGURES/'controlled_sensitivity.png', dpi=180)
     plt.close(fig)
 
-    fig, axes = plt.subplots(1, 3, figsize=(10.4, 3.25), layout='constrained')
+    fig, axes = plt.subplots(3, 1, figsize=(6.4, 7.2), layout='constrained')
     for method in METHODS:
         rows = sorted((r for r in replay if r['noise'] == 'low' and r['method'] == method),
                       key=lambda r: int(r['poses']))

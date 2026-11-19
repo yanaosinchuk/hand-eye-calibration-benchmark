@@ -1,6 +1,10 @@
 # Manuscript source and result provenance
 
-The shortened manuscript keeps theoretical content only for the five OpenCV hand-eye methods. General matrix algebra, basic coordinate tutorials, worked foundation examples and their former 104-equation inventory have been removed. Numeric citations are generated with natbib and BibTeX (`unsrtnat`). A subsection's shared source is normally cited once in its closing paragraph; distinct sources remain beside the relevant discussion.
+The manuscript retains the original introduction, title-page presentation, Latin Modern typography, default article page layout, paragraph spacing and thesis structure. Every main chapter and appendix starts on a fresh page. The five OpenCV hand-eye methods form the shortened theoretical framework. General matrix algebra, basic coordinate tutorials, worked foundation examples and their former 104-equation inventory have been removed. Numeric citations are generated with natbib and BibTeX (`unsrtnat`). A subsection's shared source is normally cited once in its closing paragraph; distinct sources remain beside the relevant discussion.
+
+## Introduction
+
+The motivation, research question, scope and reading guide are retained as a separate introduction. `marr2010` supports the original attributed opening quotation; `wenhardtde`, `tsai` and `halconde` support the calibration setting. `eauncertainty` distinguishes physical repeatability and reference-based accuracy from the numerical sensitivity and held-out consistency that were actually evaluated. The personal preface is restored verbatim from the initial manuscript.
 
 ## Method and implementation claims
 

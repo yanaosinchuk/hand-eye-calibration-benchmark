@@ -1,0 +1,14 @@
+\begin{table}[!htbp]\centering\small
+\caption{Nearly single-axis profile, 32 poses and high noise. Translation errors remain in mm; all five methods return valid outputs in the pose model, while Park has one rejected output in the pixel model.}\label{tab:axis-tails}
+\begin{tabular}{lrrrr}
+\toprule
+Method & Med. $e_t$, poses & $p_{95}$, poses & Med. $e_t$, pixels & $p_{95}$, pixels \\
+\midrule
+Tsai & $315.9$ & $620.8$ & $292.7$ & $537.2$ \\
+Park & $284.5$ & $595.1$ & $294.7$ & $542$ \\
+Horaud & $284.8$ & $601.3$ & $302.8$ & $544.2$ \\
+Andreff & $307.7$ & $495.9$ & $315.2$ & $446.4$ \\
+Daniilidis & $213.5$ & $6.027\times10^{4}$ & $184.7$ & $5.172\times10^{4}$ \\
+\bottomrule
+\end{tabular}
+\end{table}

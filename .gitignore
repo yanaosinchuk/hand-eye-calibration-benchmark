@@ -29,7 +29,6 @@ dist/
 *.synctex.gz
 *.toc
 *.xdv
-paper/main.pdf
 
 # Temporary experiment outputs and raw acquisition data
 outputs/
@@ -47,3 +46,4 @@ Thumbs.db
 
 # Private laboratory archive
 Data4Osinchuk.zip
+

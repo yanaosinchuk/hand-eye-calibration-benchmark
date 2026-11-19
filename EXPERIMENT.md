@@ -2,7 +2,7 @@
 
 ## Reproduce
 
-Use Python 3.12 and install the versions in requirements.txt. Place Data4Osinchuk.zip next to laboratory.py and run the command in README.md. The image measurements stay local. The output tables retain trial number, seed, pose count, observed error and solver failures.
+Use Python 3.12 and install the versions in requirements.txt. Place Data4Osinchuk.zip next to laboratory.py and run the command in README.md. The original images are supplied separately. Per-view held-out measurements and the June correction log are committed in results/thesis/. The output tables retain trial number, seed, pose count, observed error and solver failures.
 
 ## Measurement model
 
@@ -48,3 +48,16 @@ For each of 15 June and 18 July held-out poses, the intrinsic matrix, distortion
 Daniilidis gave the lowest median image prediction error in both series. Park and Horaud gave almost identical median 3D consistency on July data. Absolute camera pose error can be reported for the simulated trials. The pose and pixel benchmark folders additionally contain the earlier controlled orientation-profile experiments.
 
 ![Simulation and real validation](results/thesis/comparison.png)
+
+
+## Manuscript and regenerated outputs
+
+The compiled manuscript is `paper/main.pdf`; its source is `paper/main.tex`. It now contains the five-method theory only, both controlled models, the recorded-trajectory replay, laboratory preprocessing/validation, the circular diagnostic, all completed result types and their limitations. The appendices print all 270 controlled condition summaries and all 60 replay summaries.
+
+Run `python scripts/build_paper_results.py` after installing `requirements-paper.txt` to rebuild the LaTeX tables and paper figures from the committed records. This also rebuilds `real_summary.csv` from `held_out.csv` and `june_held_out.csv`. The fitted nominal geometry is recorded without rounding in `geometry_metadata.json`. This formatting command does not rerun calibration.
+
+The controlled nearly single-axis, high-noise conditions have very large finite translation tails; the 32-pose Daniilidis 95th percentiles reach approximately 60.3 m and 51.7 m for the pose and pixel models. Therefore the favourable replay and held-out medians above are condition-specific.
+
+The circular diagnostic uses nine detected grids and supports pose-ID rotation consistency (median 0.077 degrees, maximum 0.383 degrees). Its naive row-order baseline filters image detections before selecting the first robot rows (median 13.989 degrees); pairing before filtering instead gives 12.997 degrees. The full circular-target transform and physical spacing remain unvalidated. The real-validation loop currently aborts on a solver exception; all recorded 165 predictions completed.
+
+See `docs/reproducibility-check.md` for the rerun record and `docs/citation-map.md` for the revised manuscript provenance.

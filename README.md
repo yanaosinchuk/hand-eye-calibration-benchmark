@@ -1,132 +1,82 @@
-# Hand–Eye Calibration Benchmark
+# Hand-Eye Calibration Benchmark
 
-Bachelor’s thesis project in Applied Mathematics at Hochschule Darmstadt.
-An experimental comparison of OpenCV hand-eye calibration methods using synthetic data and laboratory robot measurements.
+Bachelor's thesis project in Applied Mathematics at Hochschule Darmstadt.
+A comparison of the five OpenCV hand-eye implementations using controlled synthetic data, recorded DENSO robot motions and held-out laboratory images.
 
-**Status: work in progress.** The repository contains the theoretical thesis draft and a runnable synthetic eye-to-hand benchmark. Laboratory validation covers the June and July checkerboard series.
+The manuscript now contains a concise account of the five methods, the implemented simulations, data processing, all completed experiment types, numerical results, limitations and conclusions. General coordinate-algebra tutorials have been removed. Full condition summaries are printed in the appendices.
 
-## Research question
+- [Compiled thesis](paper/main.pdf)
+- [LaTeX source](paper/main.tex)
+- [Experiment record](EXPERIMENT.md)
+- [Source and result provenance](docs/citation-map.md)
 
-A camera and a robot describe positions in different coordinate systems. Hand-eye calibration estimates the fixed transformation connecting those descriptions [1].
-The central equation is
+## Methods and implemented geometry
 
-$$
-A_i X = X B_i,
-$$
+The evaluated implementations in OpenCV 4.12.0 are Tsai-Lenz, Park-Martin, Horaud-Dornaika, Andreff-Horaud-Espiau and Daniilidis. All methods receive the same observations within each trial.
 
-where $A_i$ and $B_i$ are corresponding relative motions and $X$ is the unknown rigid transformation [1].
+The camera is stationary and the target is rigidly attached to the tool frame. A transform maps coordinates from its subscript frame into its superscript frame. Write `G = base_T_gripper`, `M = gripper_T_target`, `Y = base_T_camera` and `C = camera_T_target`. The observation chain is `G @ M = Y @ C`. OpenCV receives `inverse(G)` and `C`; its returned transform is interpreted as `Y` for this eye-to-hand arrangement. See the [OpenCV API](https://docs.opencv.org/4.12.0/d9/d0c/group__calib3d.html) and the [inspected 4.12.0 implementation](https://github.com/opencv/opencv/blob/4.12.0/modules/calib3d/src/calibration_handeye.cpp).
 
-The project will investigate how five calibration methods differ in accuracy, validation consistency and repeatability, and how those differences depend on the number and diversity of acquisition poses.
+## Run the numerical experiments
 
-## Methods to compare
-
-The benchmark uses the five methods provided by OpenCV’s `calibrateHandEye` interface [2]:
-
-- Tsai–Lenz
-- Park–Martin
-- Horaud–Dornaika
-- Andreff–Horaud–Espiau
-- Daniilidis
-
-All methods receive the same observations and preprocessing. Rotation and translation errors are reported separately.
-
-## Repository contents
-
-| Path | Contents |
-| --- | --- |
-| `README.md` | Project scope, current status and next steps |
-| `.gitignore` | Exclusions for Python caches, LaTeX build products and temporary outputs |
-| `benchmark.py` | Synthetic eye-to-hand simulation and Monte Carlo evaluation |
-| `requirements.txt` | Pinned dependencies for reproducing the simulation |
-| `paper/main.tex` | Complete LaTeX thesis draft, including mathematical derivations and the proposed experimental protocol |
-| `paper/references.bib` | Bibliography for the thesis |
-| `docs/citation-map.md` | Source locations and provenance of the displayed formulas and worked examples |
-| `paper/Logo-Hochschule-Darmstadt.png` | University logo used by the title page |
-
-## Run the synthetic benchmark
-
-Use Python 3.12. All five methods receive the same observations in every trial.
+Use Python 3.12 and the pinned numerical dependencies:
 
 ```bash
 python -m pip install -r requirements.txt
 python benchmark.py --model poses --trials 100 --seed 42 --output outputs/poses
 python benchmark.py --model pixels --trials 100 --seed 42 --output outputs/pixels
+python laboratory.py Data4Osinchuk.zip --trials 100 --seed 42 --output outputs/laboratory
+python circle_diagnostic.py Data4Osinchuk.zip
 ```
 
-The camera is fixed relative to the robot base. A 7 × 5 grid of inner corners with 20 mm spacing is fixed relative to the gripper. With the convention that a transform maps from its subscript frame into its superscript frame, write `G = base_T_gripper`, `X = gripper_T_target`, `Y = base_T_camera`, and `C = camera_T_target`. The simulator constructs poses satisfying `G @ X = Y @ C`. OpenCV receives `inverse(G)` and `C`; the returned estimate is `Y` for this eye-to-hand arrangement [2].
+`Data4Osinchuk.zip` is the separately supplied original acquisition archive. The two generic benchmarks run without it. Outputs go into ignored `outputs/` folders. Recorded summaries are in `results/`.
 
-| Factor | Values |
-| --- | --- |
-| Acquisition poses | 8, 16, 32 |
-| Orientation profile | Isotropic rotation-vector standard deviation of 22° (diverse) or 4° (narrow), or per-axis standard deviations of 0.5°, 0.5°, and 22° (nearly single-axis) |
-| Pose noise (standard deviations per component) | Exact, low (0.1° and 0.5 mm), high (0.5° and 2 mm) |
-| Pixel noise (standard deviation per coordinate) | Exact, low (0.25 px), high (1 px) |
+| Experiment | Conditions | Attempts or predictions |
+| --- | ---: | ---: |
+| Generic pose model | 27, each with 5 methods | 13,500 method attempts |
+| Generic pixel/PnP model | 27, each with 5 methods | 13,500 method attempts |
+| Recorded DENSO trajectory replay | 12, each with 5 methods | 6,000 method attempts |
+| June and July held-out validation | 15 + 18 views, each with 5 methods | 165 predictions |
 
-The `poses` model independently perturbs robot and camera-side target poses. The `pixels` model perturbs robot poses and projects the target through a fixed pinhole camera, adds pixel noise, and recovers camera-side poses with `solvePnP`. Distortion, uncertainty in intrinsics, and physical robot reachability are outside this simulation. Each trial uses the same seeded random draws across conditions, and shorter pose sets are prefixes of longer ones.
+The generic benchmark uses 8, 16 and 32 poses; diverse, narrow and nearly single-axis rotation-vector profiles; and exact, low and high noise. Its target has 35 inner corners with 20 mm spacing and its image size is 4096 x 3000 pixels. `poses` perturbs complete robot and camera-side target poses. `pixels` perturbs the robot pose and projected image coordinates, then recovers the target pose with iterative PnP. Physical pixel pitch, image rasterisation, detector failures and robot reachability are not modelled.
 
-`trials.csv` contains the angular error and Euclidean translation error against the known camera pose, plus solver status. `summary.csv` reports medians and 95th percentiles for valid estimates and counts failed estimates. A fallback identity transform counts as a failure because the simulated true transform is nonidentity. A valid transform can still have a large error, so compare both error distributions and failure counts. Nominal pixel-mode trials still perform numerical PnP, even with exactly zero pixel noise.
+The replay uses 20 recorded robot poses and 88 checkerboard corners at 12 mm spacing. A nominal camera/mount fit from 18 accepted July images defines the simulated truth. It is not an independently surveyed physical reference. The original July image dimensions are 4112 x 3008 pixels. The fitted nominal matrices and distortion coefficients are in [geometry_metadata.json](results/thesis/geometry_metadata.json).
 
-## Build the thesis
+Each trial reuses the same seeded observations across methods. Shorter subsets are nested. `summary.csv` reports error medians and 95th percentiles for valid transforms and counts rejected outputs separately. Large finite errors remain included. Narrow-motion Tsai failures and very large nearly single-axis Daniilidis translation tails are part of the results, so there is no universal winning method.
 
-Use a TeX installation containing pdfLaTeX, Biber, biblatex, PGFPlots, listings, German and Ukrainian Babel language files, and T2A Cyrillic fonts (for example CM-Super). The Ukrainian bibliography preserves the original titles and author names.
+## Laboratory records and diagnostics
+
+The June ODS parser applies eight explicitly logged inferred decimal-separator corrections. July checkerboard photographs P47 and P48 have identical bytes with different robot labels, so both are excluded from real-image fitting and scoring. The raw held-out prediction rows and corrections are now committed in `results/thesis/`.
+
+All camera intrinsics, distortion, hand-eye and mount parameters are fitted on training observations only within each leave-one-pose-out fold. Image scores measure prediction consistency. The archive does not provide an independently measured camera pose.
+
+The circular-target diagnostic detects nine of eleven grids. Pose-ID pairing gives a median relative rotation-angle discrepancy of 0.077 degrees and maximum 0.383 degrees. Its current naive row-order baseline gives 13.989 degrees and maximum 60.897 degrees, but does not preserve raw-row pairing when detections fail. A separate audit pairing before detection filtering gives median 12.997 degrees and maximum 46.441 degrees. These are rotation-only diagnostics; physical circle spacing and the full circular-target hand-eye transform remain unvalidated. The manuscript describes this limitation without treating a diagnostic baseline as a proven cause of the historical failure.
+
+The real-validation loop currently stops on a solver exception; all 165 recorded predictions completed. Automated regression tests and CI for the numerical pipeline have not been added.
+
+## Regenerate the thesis tables and figures
+
+From the repository root:
+
+```bash
+python -m pip install -r requirements.txt -r requirements-paper.txt
+python scripts/build_paper_results.py
+```
+
+This formats the recorded summaries, recomputes `results/thesis/real_summary.csv` from the committed per-view records, and rebuilds `paper/generated/` and `paper/figures/`. It does not rerun calibration or require the original image archive. The PDF includes 270 controlled condition rows, 60 replay rows, the laboratory summaries and the June correction log. Plotting uses Matplotlib 3.10.8, kept separate from the numerical experiment requirements.
+
+## Build the LaTeX document
+
+The paper uses pdfLaTeX with numbered BibTeX references. A TeX installation with the packages listed in `paper/main.tex`, Latin Modern fonts and German Babel support is sufficient. Biber and Ukrainian font packages are no longer required by this shortened manuscript.
 
 ```bash
 cd paper
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-Alternatively:
+Or run `pdflatex main.tex`, `bibtex main`, then `pdflatex main.tex` twice. For Overleaf, upload the contents of `paper/` preserving `generated/` and `figures/`, and select pdfLaTeX. The committed tables and figures make the paper self-contained for a LaTeX build.
 
-```bash
-pdflatex -interaction=nonstopmode -halt-on-error main.tex
-biber main
-pdflatex -interaction=nonstopmode -halt-on-error main.tex
-pdflatex -interaction=nonstopmode -halt-on-error main.tex
-```
-
-For Overleaf, upload the files inside `paper/` into the project root and select pdfLaTeX. The source uses Biber and refers to the logo as `Logo-Hochschule-Darmstadt.png`.
-
-The manuscript is a working draft. Examiner names, the final declaration of authorship, hardware specifications and experimental findings remain to be completed.
-
-## Planned experiments
-
-1. Generate synthetic robot and camera poses from a known rigid transformation and verify calibration on exact data.
-2. Compare rotation and translation errors under controlled measurement noise using repeated trials and recorded random seeds.
-3. Vary the pose count and the diversity of orientations and positions.
-4. Acquire laboratory observations using a documented camera, robot and calibration-target setup.
-5. Evaluate repeatability and consistency on held-out observations; report absolute laboratory accuracy when an independent reference is available.
-
-Finite solver outputs will be checked for valid rigid transformations. Numerical failures will be recorded explicitly. Coordinate conventions, translation units and the installed OpenCV version will be documented with the experiments.
-
-## Starting references
-
-- Peter Corke, *Robotics, Vision and Control*: [author’s book overview](https://petercorke.com/books/robotics-vision-control-all-versions/).
-- Roger Y. Tsai and Reimar K. Lenz, *A New Technique for Fully Autonomous and Efficient 3D Robotics Hand/Eye Calibration* (1989): [IEEE](https://ieeexplore.ieee.org/document/34770), DOI `10.1109/70.34770`.
-- OpenCV, [`calibrateHandEye` documentation](https://docs.opencv.org/5.0/main_modules/calib.html#calibratehandeye).
-
-The thesis bibliography also includes the original papers for the other compared methods, the inspected OpenCV source and David Marr’s *Vision*. German robotics and numerical-algebra texts and two Ukrainian textbooks support the mathematical foundations. See the [citation map](docs/citation-map.md) for the passages used and for the distinction between source relations and calculations constructed in this thesis.
-
-The thesis uses plain numbered citations. A subsection that mainly draws on the same source cites it once in its closing paragraph; references for distinct material and direct quotations remain beside the relevant discussion. Worked examples cite their underlying mathematical relations. Draft-only instructions, provisional experiment plans and empty chapter headings are preserved as LaTeX comments and do not appear in the PDF.
-
-[1] Stefan Wenhardt, *Ansichtenauswahl für die 3-D-Rekonstruktion statischer Szenen* (2013), Section 2.3: [German dissertation](https://www5.cs.fau.de/fileadmin/research/Publikationen/2013/Wenhardt13-AFD.pdf).
-
-[2] OpenCV, [`calibrateHandEye` documentation](https://docs.opencv.org/5.0/main_modules/calib.html#calibratehandeye).
+The numerical source revision used for the recorded experiments is `4091828055efe2b13eefb3d59bc8756474ed5b2c`. The source code was reviewed and rerun with NumPy 2.2.6 and OpenCV 4.12.0. The 270 controlled summaries, 60 replay summaries and ten laboratory summary rows were reproduced. The [verification record](docs/reproducibility-check.md) distinguishes these checks from unvalidated physical accuracy.
 
 ## Author
 
-Yana Osinchuk — B.Sc. Applied Mathematics, Hochschule Darmstadt.
-
-
-## Professor's DENSO data
-
-Run the paired trajectory simulation and leave-one-pose-out image validation with the original archive.
-
-```bash
-python laboratory.py Data4Osinchuk.zip --output outputs/thesis --trials 100 --seed 42
-```
-
-See `EXPERIMENT.md` for the dataset audit, scoring rules and run results.
-
-The published summaries and comparison figure are in [results](results/). Running the commands above regenerates the trial-level CSV files. The laboratory command uses the separately supplied archive. The synthetic benchmark runs without it.
-
-Run `python circle_diagnostic.py Data4Osinchuk.zip` to compare pose-ID pairing and row-order pairing for the July circular target. On nine detected grids, the median relative rotation discrepancy was 0.077° with pose-ID pairing and 13.989° with row-order pairing. This diagnostic tests rotation consistency only. The physical circle spacing and full circular-target hand–eye transform were not validated.
+Yana Osinchuk - B.Sc. Applied Mathematics, Hochschule Darmstadt.

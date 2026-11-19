@@ -22,7 +22,9 @@ The motivation, research question, scope and reading guide are retained as a sep
 
 The inspected OpenCV source is `modules/calib3d/src/calibration_handeye.cpp` at tag `4.12.0`, blob `cd4999a61831d7cf20831ed7ffd138194be49a73`. The former bibliography pointed to a 5.x source snapshot. The current citation matches the installed experiment version; the mathematical routines were compared with that earlier snapshot and the observed differences were source syntax rather than solver mathematics.
 
-The principal method equations are adapted to the manuscript's conventions. The common rotation/translation relation and all five method formulations are attributed to original papers and/or the inspected implementation. No new independent solver implementation is claimed.
+The principal method equations are adapted to the manuscript's conventions. The framework first expands the common equation `A_l X = X B_l` into its rotation and translation blocks, then traces each method back to those same blocks. It gives the shared translation least-squares fit for Tsai, Park and Horaud; quaternion recovery and multiplication matrices; the row-vectorisation derivation of Andreff's joint system; and the rotation/translation expansion and decoding of Daniilidis's dual-quaternion equation. Quaternion multiplication is written with a star, while the Kronecker product uses a tensor-product symbol. A closing comparison distinguishes a shared unknown from identical noisy-data objectives.
+
+The common relations and all five method formulations are attributed to original papers and/or the inspected implementation. Tsai's thresholds apply to the scaled vectors `P = 2 q_v`, not to unscaled unit-quaternion vector parts. No new independent solver implementation is claimed. This explanatory revision changes neither numerical source code nor recorded results.
 
 ## Experiment and dataset claims
 

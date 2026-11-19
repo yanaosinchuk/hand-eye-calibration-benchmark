@@ -115,60 +115,180 @@ Section~\ref{sec:methods} provides the theoretical framework for the five method
 
 \clearpage
 \section{Theoretical Framework}\label{sec:methods}
-The study asks how the five OpenCV implementations differ under shared observations, controlled perturbations and held-out image prediction. The theoretical scope is limited to these methods. Their common algebraic problem is
+All five methods in this chapter estimate the same fixed rigid transformation from the same paired robot and camera observations. They differ in how they represent the unknown and turn the calibration equation into a numerical problem. The account follows the implementations in OpenCV 4.12.0, since a method name alone does not specify every implementation detail. \cite{opencv,opencvsource}
+
+\subsection{The common equation and its two parts}\label{sec:common-problem}
+For each pair of acquisition poses, the known transformations $A_\ell$ and $B_\ell$ describe corresponding relative motions. The index $\ell=1,\ldots,m$ enumerates these motion pairs, rather than individual images. The unknown $X$ is constant across the whole dataset:
 \begin{equation}\label{eq:axxb}
-A_\ell X=XB_\ell,
-\qquad
-(R_{A_\ell}-I)t_X=R_Xt_{B_\ell}-t_{A_\ell},
+A_\ell X=XB_\ell,\qquad \ell=1,\ldots,m.
 \end{equation}
-where $A_\ell,B_\ell$ are corresponding relative motions. Here $X$ denotes a generic unknown; in the implemented eye-to-hand experiments that unknown is the camera-to-base transform $Y$ defined in Section~\ref{sec:simulation}. Tsai, Park and Horaud estimate rotation before translation; Andreff and Daniilidis couple the two parts. All five are called through \code{cv2.calibrateHandEye}. The implementation statements below refer to the OpenCV 4.12.0 source, rather than assuming that a method name specifies every numerical detail. \cite{opencv,opencvsource}
+The equality says that applying the motion $B_\ell$ and then changing coordinates with $X$ must give the same result as first changing coordinates with $X$ and then applying $A_\ell$. In this thesis's fixed-camera experiments, $X$ is the camera-to-base transformation, denoted by $Y$ in Section~\ref{sec:simulation}. It is neither the target pose in one image nor the camera's intrinsic matrix.
+
+Each transformation has a $3\times3$ rotation block and a three-component translation block:
+\begin{equation}\label{eq:rigid-blocks}
+\begin{gathered}
+A_\ell=\begin{pmatrix}R_{A_\ell}&t_{A_\ell}\\0^\top&1\end{pmatrix},\qquad
+B_\ell=\begin{pmatrix}R_{B_\ell}&t_{B_\ell}\\0^\top&1\end{pmatrix},\\
+X=\begin{pmatrix}R_X&t_X\\0^\top&1\end{pmatrix},\qquad
+R_X^\top R_X=I_3,\quad \det R_X=1.
+\end{gathered}
+\end{equation}
+Multiplying the blocks in~\eqref{eq:axxb} makes the shared task explicit:
+\begin{equation}\label{eq:axxb-expanded}
+\begin{pmatrix}
+R_{A_\ell}R_X&R_{A_\ell}t_X+t_{A_\ell}\\0^\top&1
+\end{pmatrix}
+=
+\begin{pmatrix}
+R_XR_{B_\ell}&R_Xt_{B_\ell}+t_X\\0^\top&1
+\end{pmatrix}.
+\end{equation}
+Thus every method must determine an orientation $R_X$ and a displacement $t_X$ satisfying
+\begin{align}
+R_{A_\ell}R_X&=R_XR_{B_\ell},\label{eq:axxb-rotation}\\
+(R_{A_\ell}-I_3)t_X&=R_Xt_{B_\ell}-t_{A_\ell}.\label{eq:axxb-translation}
+\end{align}
+The rotation equation contains no $t_X$. Once $R_X$ is known, the translation equation is linear in the three unknown components of $t_X$. This is why Tsai--Lenz, Park--Martin and Horaud--Dornaika can solve the two parts in sequence. Andreff and Daniilidis instead use formulations that couple them.
+
+For the first three methods, a common final step stacks the translation equations. For the motion pairs used by the method, define
+\begin{equation}\label{eq:translation-fit}
+\begin{gathered}
+D=\begin{pmatrix}R_{A_1}-I_3\\\vdots\\R_{A_m}-I_3\end{pmatrix},\qquad
+e(\widehat R_X)=\begin{pmatrix}\widehat R_Xt_{B_1}-t_{A_1}\\\vdots\\\widehat R_Xt_{B_m}-t_{A_m}\end{pmatrix},\\
+\widehat t_X=\mathop{\arg\min}_{t\in\mathbb R^3}
+\|Dt-e(\widehat R_X)\|_2^2.
+\end{gathered}
+\end{equation}
+OpenCV solves this linear least-squares problem by singular value decomposition (SVD). Its unique determination requires enough independent motion information; many measurements of essentially the same rotation axis do not supply the same information as diverse axes. With noisy observations, an exact common solution of~\eqref{eq:axxb} generally need not exist. The five methods then fit different algebraic residuals, so solving the same calibration problem does not imply returning identical estimates. \cite{opencv,opencvsource}
 
 \subsection{Tsai--Lenz}
-Let $q_A=(a_0,a)$ and $q_B=(b_0,b)$ represent corresponding relative rotations. With compatible quaternion signs, the Tsai construction estimates the three-vector $u=q_{X,v}/q_{X,0}$ from
-\begin{equation}\label{eq:tsai}
-\crossmat{P_A+P_B}u=P_B-P_A,
-\qquad P_A=2a,\quad P_B=2b,
-\qquad q_X=\frac{(1,u)}{\sqrt{1+u^\top u}}.
+Tsai--Lenz rewrites the rotation part~\eqref{eq:axxb-rotation} using unit quaternions. A quaternion $q=(q_0,q_v)$ represents a rotation by angle $\theta$ about unit axis $n$ through $q_0=\cos(\theta/2)$ and $q_v=\sin(\theta/2)n$. It has four components with $q_0^2+q_v^\top q_v=1$; $q$ and $-q$ represent the same rotation. In quaternion notation, the rotation equation becomes
+\begin{equation}\label{eq:quaternion-handeye}
+q_{A_\ell}\star q_X=q_X\star q_{B_\ell},
 \end{equation}
-The rotation is recovered from $q_X$, and translation is fitted from the stacked equations in~\eqref{eq:axxb}. The parametrisation is singular for a hand--eye rotation of exactly $180^\circ$. OpenCV rejects a relative pair when either quaternion-vector norm is below 0.3 or above 1.7, corresponding to principal angles of approximately $17.3^\circ$ and $116.4^\circ$. Only retained pairs enter its translation solve. With fewer than two retained pairs, the routine logs a failure and can return its initial identity output. This behaviour is relevant to the narrow-orientation experiment. \cite{tsai,opencvsource}
+where $\star$ denotes quaternion multiplication.
+
+Write $q_{A_\ell}=(a_{0,\ell},a_\ell)$ and $q_{B_\ell}=(b_{0,\ell},b_\ell)$. Exact corresponding relative rotations have the same angle, so compatible quaternion signs give $a_{0,\ell}=b_{0,\ell}$. The vector part of~\eqref{eq:quaternion-handeye} then yields a linear equation for the three-component unknown $u=q_{X,v}/q_{X,0}$:
+\begin{equation}\label{eq:tsai}
+\crossmat{P_{A_\ell}+P_{B_\ell}}u=P_{B_\ell}-P_{A_\ell},\qquad
+P_{A_\ell}=2a_\ell,\quad P_{B_\ell}=2b_\ell.
+\end{equation}
+Here $[v]_\times w=v\times w$ expresses a cross product as matrix multiplication.
+
+\begin{samepage}
+OpenCV stacks these equations and estimates $\widehat u$ by SVD. It recovers the quaternion and rotation by
+\begin{align}
+\widehat q_X&=\frac{(1,\widehat u)}{\sqrt{1+\widehat u^\top\widehat u}},\label{eq:tsai-recovery}\\
+R(q)&=(q_0^2-q_v^\top q_v)I_3+2q_vq_v^\top+2q_0\crossmat{q_v}.
+\label{eq:quaternion-rotation}
+\end{align}
+\end{samepage}
+Finally, $\widehat R_X=R(\widehat q_X)$ is inserted into~\eqref{eq:translation-fit} to obtain $\widehat t_X$. The quaternion is therefore an intermediate representation of the rotation block of the same $X$ in~\eqref{eq:axxb}.
+
+The quotient defining $u$ is singular when the unknown hand--eye rotation is exactly $180^\circ$, since then $q_{X,0}=0$. OpenCV also filters the \emph{input relative motions}: it rejects a pair when either scaled vector norm $\|P_{A_\ell}\|$ or $\|P_{B_\ell}\|$ is below 0.3 or above 1.7. These limits correspond to principal relative angles of approximately $17.3^\circ$ and $116.4^\circ$. Only retained pairs enter the rotation and translation fits. With fewer than two retained pairs, the routine logs a failure and can return its initial identity output. This filtering is relevant to the narrow-orientation experiment. \cite{tsai,opencvsource}
 
 \subsection{Park--Martin}
-Park and Martin use rotation logarithms. With $a_\ell=(\log R_{A_\ell})^\vee$ and $b_\ell=(\log R_{B_\ell})^\vee$, compatible rotations satisfy
+Park--Martin starts from the same rotation equation~\eqref{eq:axxb-rotation}, rearranged as $R_{A_\ell}=R_XR_{B_\ell}R_X^\top$. It represents each known relative rotation by its rotation vector: the direction is the rotation axis and the length is the angle in radians. Equivalently, $a_\ell=(\log R_{A_\ell})^\vee$ and $b_\ell=(\log R_{B_\ell})^\vee$, where $\vee$ extracts the vector from a skew-symmetric matrix. Under compatible logarithm choices, the conjugacy relation becomes
 \begin{equation}\label{eq:park}
 a_\ell=R_Xb_\ell.
 \end{equation}
-The rotational problem aligns these vector collections. The OpenCV routine forms $M=\sum_\ell b_\ell a_\ell^\top$ and evaluates $(M^\top M)^{-1/2}M^\top$ through an eigendecomposition. Translation is subsequently fitted using~\eqref{eq:axxb}. Very small eigenvalues can make this inverse-square-root calculation unstable, and a returned matrix must still be checked for a proper rotation. \cite{park,opencvsource}
+Thus the unknown rotation must align one collection of known three-dimensional vectors with the other. The vector alignment is a rewritten form of $R_{A_\ell}R_X=R_XR_{B_\ell}$, not a different calibration task.
+
+OpenCV obtains the vectors with \code{Rodrigues}. It combines their information in a $3\times3$ matrix and computes the rotation by
+\begin{equation}\label{eq:park-recovery}
+S=\sum_\ell b_\ell a_\ell^\top,\qquad
+\widehat R_X=(S^\top S)^{-1/2}S^\top.
+\end{equation}
+The inverse square root is evaluated through an eigendecomposition. Translation then follows from~\eqref{eq:translation-fit}, giving the same two output blocks $\widehat R_X,\widehat t_X$ as Tsai--Lenz. The difference is the rotation representation and fit: Park aligns rotation vectors, whereas Tsai fits a quaternion-vector equation.
+
+Very small eigenvalues make the inverse-square-root calculation unstable. The OpenCV routine does not add a determinant correction to this rotation formula, so its returned matrix must still be checked for a proper rotation. This implementation detail matters when observations are noisy or the motion geometry is poorly conditioned. \cite{park,opencvsource}
 
 \subsection{Horaud--Dornaika}
-The separable OpenCV implementation expresses quaternion multiplication through left and right multiplication matrices, $L$ and $\mathcal R$. It estimates a unit quaternion by
-\begin{equation}\label{eq:horaud}
-\widehat q_X=\mathop{\arg\min}_{\|q\|=1}
-\sum_\ell\left\|\left(L(q_{A_\ell})-\mathcal R(q_{B_\ell})\right)q\right\|^2.
+Horaud--Dornaika uses the quaternion form~\eqref{eq:quaternion-handeye} of the same rotation equation, but keeps all four components of $q_X$ instead of dividing by its scalar component. Quaternion multiplication can be written as ordinary matrix multiplication. For $q=(q_0,q_v)$, define
+\begin{equation}\label{eq:quaternion-matrices}
+\begin{aligned}
+L(q)&=\begin{pmatrix}q_0&-q_v^\top\\q_v&q_0I_3+\crossmat{q_v}\end{pmatrix},\\
+\mathcal R(q)&=\begin{pmatrix}q_0&-q_v^\top\\q_v&q_0I_3-\crossmat{q_v}\end{pmatrix}.
+\end{aligned}
 \end{equation}
-The smallest eigenvector of the associated symmetric matrix gives the rotation quaternion. Translation is then solved separately. The construction avoids dividing by the unknown quaternion's scalar part, although consistent signs and informative rotations remain important. The comparison evaluates this OpenCV routine, rather than all nonlinear procedures discussed in the original paper. \cite{horaud,opencvsource}
+Then $L(q_A)q_X=q_A\star q_X$ and $\mathcal R(q_B)q_X=q_X\star q_B$. Consequently, each motion pair supplies the homogeneous linear constraint
+\begin{equation}\label{eq:horaud-linear}
+K_\ell q_X=0,\qquad K_\ell=L(q_{A_\ell})-\mathcal R(q_{B_\ell}).
+\end{equation}
+The zero vector would satisfy every such homogeneous equation, but cannot represent a rotation. The unit-length condition excludes it. For noisy observations, OpenCV solves the resulting constrained least-squares problem:
+\begin{equation}\label{eq:horaud}
+N=\sum_\ell K_\ell^\top K_\ell,\qquad
+\widehat q_X=\mathop{\arg\min}_{\|q\|=1}q^\top Nq.
+\end{equation}
+The unit eigenvector of the symmetric $4\times4$ matrix $N$ associated with its smallest eigenvalue gives $\widehat q_X$. Equation~\eqref{eq:quaternion-rotation} converts it to $\widehat R_X$, and~\eqref{eq:translation-fit} supplies $\widehat t_X$.
+
+The essential distinction from Tsai--Lenz is therefore a four-component unit-quaternion eigenproblem instead of a three-component quaternion quotient. It avoids division by $q_{X,0}$; consistent input quaternion signs and informative rotations remain important. OpenCV chooses nonnegative scalar parts for the input quaternions. This comparison concerns its separable routine, rather than all nonlinear procedures discussed in the original paper. \cite{horaud,opencvsource}
 
 \subsection{Andreff--Horaud--Espiau}
-OpenCV uses a joint linear system with nine rotation entries and three translation entries. For row-wise vectorisation $r=\operatorname{rvec}(R_X)$, a relative pair contributes
+Andreff--Horaud--Espiau uses both~\eqref{eq:axxb-rotation} and~\eqref{eq:axxb-translation} in one linear system. Its intermediate unknown contains the nine entries of $R_X$ and the three entries of $t_X$. Let $r=\operatorname{rvec}(R_X)$ list the rotation entries row by row. For row-wise vectorisation, $\operatorname{rvec}(PRQ)=(P\otimes Q^\top)\operatorname{rvec}(R)$, where $\otimes$ is the Kronecker product.
+
+Rearranging the rotation equation to $R_{A_\ell}R_XR_{B_\ell}^\top=R_X$ and vectorising gives $(I_9-R_{A_\ell}\otimes R_{B_\ell})r=0$. The translation equation can be written as $R_Xt_{B_\ell}+(I_3-R_{A_\ell})t_X=t_{A_\ell}$. Combining these two statements yields the block used by OpenCV:
 \begin{equation}\label{eq:andreff}
 \begin{pmatrix}
-I_9-R_A\otimes R_B&0\\
-I_3\otimes t_B^\top&I_3-R_A
+I_9-R_{A_\ell}\otimes R_{B_\ell}&0\\
+I_3\otimes t_{B_\ell}^\top&I_3-R_{A_\ell}
 \end{pmatrix}
 \begin{pmatrix}r\\t_X\end{pmatrix}
 =
-\begin{pmatrix}0\\t_A\end{pmatrix}.
+\begin{pmatrix}0\\t_{A_\ell}\end{pmatrix}.
 \end{equation}
-The stacked system is solved by least squares. The raw rotation is normalised using determinant scaling and an SVD projection, while the translation from the joint solve is retained. Rotation residuals are dimensionless, whereas translation residuals carry length units; changing the length unit changes their relative weighting in noisy data. All experiments here use millimetres. No post-normalisation translation refit is added to the OpenCV method. \cite{andreff,opencvsource}
+The upper nine rows encode the rotation equation; the lower three encode the translation equation. Stacking the blocks gives $12m$ scalar equations for 12 intermediate unknowns, solved together by SVD least squares. The nine fitted rotation entries are then reshaped into a $3\times3$ matrix.
+
+With noise, this raw matrix need not satisfy $R^\top R=I_3$ and $\det R=1$. OpenCV first applies determinant scaling and then an SVD projection with reflection correction to obtain a proper rotation. It retains the translation from the joint linear solve; it does not refit translation after normalising rotation. Rotation residuals are dimensionless and translation residuals carry length units, so changing the length unit changes their relative weighting in noisy data. All experiments here use millimetres. These operations still produce an estimate of the same $X$ in~\eqref{eq:axxb}; the difference is that rotation and translation influence one joint fit. \cite{andreff,opencvsource}
 
 \subsection{Daniilidis}
-A rigid pose is represented by a dual quaternion
+Daniilidis also treats rotation and translation together, representing an entire rigid transformation by a dual quaternion. It combines a rotation quaternion $q$ with a second quaternion $d$ that encodes translation relative to that rotation:
 \begin{equation}\label{eq:dual}
-Q=q+\varepsilon d,\qquad
-\varepsilon^2=0,\qquad
-d=\tfrac12(0,t)\otimes q,\qquad
-q^\top q=1,\quad q^\top d=0.
+\begin{gathered}
+Q=q+\varepsilon d,\qquad \varepsilon^2=0,\qquad
+d=\tfrac12(0,t)\star q,\\
+q^\top q=1,\qquad q^\top d=0.
+\end{gathered}
 \end{equation}
-The equation $Q_A\otimes Q_X=Q_X\otimes Q_B$ supplies coupled linear constraints. OpenCV constructs a six-row block per motion pair, extracts the two smallest right singular vectors and selects a combination satisfying the dual-quaternion constraints through a quadratic equation. Rotation and translation are recovered together. Degenerate motion, normalisation denominators and quadratic-root calculations can affect numerical behaviour. A finite proper transform can still be very inaccurate, so validity checks and error distributions are reported separately. \cite{daniilidis,opencvsource}
+Here $(0,t)$ is a quaternion with zero scalar part. The two constraints ensure that the eight components describe a rigid pose.
+
+\begin{samepage}
+In this representation, the complete matrix equation~\eqref{eq:axxb} becomes
+\begin{equation}\label{eq:dual-handeye}
+Q_{A_\ell}\star Q_X=Q_X\star Q_{B_\ell}.
+\end{equation}
+\end{samepage}
+Expanding its ordinary and dual parts shows the connection to the shared problem:
+\begin{align}
+q_{A_\ell}\star q_X&=q_X\star q_{B_\ell},\label{eq:dual-rotation}\\
+q_{A_\ell}\star d_X+d_{A_\ell}\star q_X
+&=q_X\star d_{B_\ell}+d_X\star q_{B_\ell}.
+\label{eq:dual-translation}
+\end{align}
+The first line is the familiar quaternion rotation equation. The second encodes the translation relation through $d_X$ and $q_X$. Both lines are linear in the eight components of $(q_X^\top,d_X^\top)^\top$ before the rigid-pose constraints are imposed.
+
+OpenCV constructs a six-row block per motion pair and stacks a $6m\times8$ matrix. It extracts the two right singular vectors with the smallest singular values. A linear combination of these vectors is selected and normalised using $q_X^\top q_X=1$ and $q_X^\top d_X=0$; the latter gives the quadratic equation used by the implementation. Finally,
+\begin{equation}\label{eq:dual-recovery}
+\widehat R_X=R(\widehat q_X),\qquad
+\widehat t_X=2\,\operatorname{vec}(\widehat d_X\star\widehat q_X^*),
+\end{equation}
+where $q^*=(q_0,-q_v)$ is quaternion conjugation and $\operatorname{vec}$ takes the three vector components. Thus both blocks of $X$ are decoded from one coupled estimate; there is no separate translation fit of the form~\eqref{eq:translation-fit}. Degenerate motion, normalisation denominators and quadratic-root calculations can affect numerical behaviour. A finite proper transform can still be very inaccurate, which motivates reporting validity checks and error distributions separately. \cite{daniilidis,opencvsource}
+
+\clearpage
+\subsection{What is shared and what differs}
+Every route ends with a matrix $\widehat X=\left(\begin{smallmatrix}\widehat R_X&\widehat t_X\\0^\top&1\end{smallmatrix}\right)$ intended to satisfy the same family of equations $A_\ell\widehat X\approx\widehat XB_\ell$. Table~\ref{tab:method-routes} summarises the intermediate problems. With exact, sufficiently informative observations and valid numerical recovery, the formulations describe the same calibration transformation. With noise, their different residuals, constraints, filtering and normalisation steps can yield different estimates. In particular, the five methods are not five implementations of one identical least-squares objective. \cite{opencv,opencvsource}
+
+\begin{table}[!htbp]\centering\small
+\caption{Five numerical routes to the same unknown transformation $X$.}\label{tab:method-routes}
+\begin{tabular}{p{0.20\linewidth}p{0.40\linewidth}p{0.25\linewidth}}\toprule
+Method & Form of the shared equation & Recovery of $t_X$\\\midrule
+Tsai--Lenz & Rotation equation as a three-component quaternion-vector system & Linear fit after $R_X$\\
+Park--Martin & Rotation equation as alignment of rotation vectors & Linear fit after $R_X$\\
+Horaud--Dornaika & Rotation equation as a unit-quaternion eigenproblem & Linear fit after $R_X$\\
+Andreff--Horaud--Espiau & Both equations as a joint system in nine rotation and three translation entries & From the joint linear fit\\
+Daniilidis & Full pose equation in unit dual quaternions & Decoded from the coupled dual-quaternion fit\\\bottomrule
+\end{tabular}
+\end{table}
 
 \clearpage
 \section{Simulation Design and Implementation}\label{sec:simulation}
